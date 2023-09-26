@@ -18,7 +18,7 @@ Este proyecto permite desplegar un entorno de desarrollo que consta de dos conte
 
 ### Preparación
 
-Dependiendo de la arquitectura de tu procesador (x86 o arm64), tendrás que descomentar las líneas correspondientes en los ficheros `Dockerfile` y `.env`.
+Dependiendo de la arquitectura de tu procesador (x86 o arm64), hay que descomentar las líneas correspondientes en los ficheros `Dockerfile` y `.env`.
 
 - **Dockerfile**
 
@@ -36,24 +36,25 @@ Dependiendo de la arquitectura de tu procesador (x86 o arm64), tendrás que desc
 
 ### Pasos de Instalación
 
-1. **Muévete** al directorio local donde deseas desplegar el entorno.
-2. **Clona** este repositorio:
+1. **Ir** al directorio local donde deseas desplegar el entorno.
+2. **Clonar** este repositorio:
 
     ```bash
-    git clone [URL_DEL_REPOSITORIO]
+    git clone https://github.com/GestoresIOC2023/GestoresCocina.git
     ```
-3. **Arranca la base de datos**
+3. **Arrancar la base de datos**
     - Instalar Docker Desktop.
-    - Instalar el plugin de docker para VScode.
-    - Abrir el fichero compose.yaml (en la raiz). 
+    - Instalar el [plugin de docker](https://code.visualstudio.com/docs/containers/overview) para VScode.
+    - Abrir el fichero *compose.yaml*. 
+	- Botón derecho -> Compose up.
 
-3. **Entra en la carpeta backend**
+4. **Entrar en la carpeta backend**
     ```js
     npm install
-    npm start
+    nodemon app.js
     ```
 
-4.  **Entra en la carpeta frontend**
+5.  **Entrar en la carpeta frontend**
     ```js
     npm install
     npm run build
@@ -63,7 +64,7 @@ Dependiendo de la arquitectura de tu procesador (x86 o arm64), tendrás que desc
 
 ## Acceso a los servicios
 
-Para acceder a los servicios, sigue las siguientes URLs desde tu navegador:
+Acceder a las siguientes URLs desde el navegador:
 
 - **Adminer**: [http://localhost:8080](http://localhost:8080)
 - **front**: [http://localhost:3000](http://localhost:3000)
@@ -71,7 +72,7 @@ Para acceder a los servicios, sigue las siguientes URLs desde tu navegador:
 
 ### Datos para Adminer
 
-Para acceder a la base de datos mediante Adminer, utiliza los siguientes datos:
+Para acceder a la base de datos mediante **Adminer**, utilizar los siguientes datos:
 
 - **System**: MySQL
 - **Server**: host.docker.internal
