@@ -1,0 +1,54 @@
+version: '3'
+services:
+  gestoresbbdd:
+      env_file: .env
+      image: ${BUILDPLATFORM}/mysql:8.1.0
+      container_name: gestoresbbdd
+      volumes:
+        - ./backend/mysql:/docker-entrypoint-initdb.d
+        - data_bbdd:/var/lib/mysql
+      ports:
+        - "${MYSQL_PORT}:3306"
+      networks:
+        - net
+  adminer:
+      image: ${BUILDPLATFORM}/adminer:4.8.1
+      container_name: adminergestores
+      depends_on:
+        - gestoresbbdd
+      ports:
+        - "${ADMINER_PORT}:8080"
+      networks:
+        - net
+  # backend:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.back
+  #   user: "node"
+  #   depends_on:
+  #     - gestoresbbdd
+  #   volumes:
+  #     - ./backend:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   ports:
+  #     - 5001:5001
+  #   networks:
+  #     - net
+  # frontend:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.front
+  #   user: "node"
+  #   volumes:
+  #     - ./frontend:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   ports:
+  #     - 3000:3000
+  #   networks:
+  #     - net
+
+volumes:
+  data_bbdd:
+
+networks:
+  net:

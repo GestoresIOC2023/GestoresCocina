@@ -1,0 +1,12 @@
+ARG NODE_VERSION=18.18-alpine
+ARG PLATFORM=amd64
+#ARG PLATFORM=arm64v8
+FROM ${PLATFORM}/node:${NODE_VERSION}
+ENV NODE_ENV=production
+WORKDIR /usr/src/app
+COPY ./backend/package*.json ./
+RUN npm install
+COPY ./backend .
+EXPOSE 5001
+CMD ["npm", "run", "dev"]
+
