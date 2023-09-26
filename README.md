@@ -11,9 +11,8 @@ Este proyecto permite desplegar un entorno de desarrollo que consta de dos conte
 ## Tabla de Contenidos
 
 1. [Instrucciones de instalación](#instrucciones-de-instalación)
-2. [Uso](#uso)
-3. [Acceso a los servicios](#acceso-a-los-servicios)
-4. [Nota importante](#nota-importante)
+2. [Acceso a los servicios](#acceso-a-los-servicios)
+3. [Nota importante](#nota-importante)
 
 ## Instrucciones de instalación
 
@@ -43,38 +42,23 @@ Dependiendo de la arquitectura de tu procesador (x86 o arm64), tendrás que desc
     ```bash
     git clone [URL_DEL_REPOSITORIO]
     ```
+3. **Arranca la base de datos**
+    - Instalar Docker Desktop.
+    - Instalar el plugin de docker para VScode.
+    - Abrir el fichero compose.yaml (en la raiz). 
 
-3. **Ejecuta** el script `update_and_run.sh` (en Linux/Mac) o `update_and_run.bat` (en Windows):
-
-    ```bash
-    ./update_and_run.sh  # o update_and_run.bat en Windows
+3. **Entra en la carpeta backend**
+    ```js
+    npm install
+    npm start
     ```
 
-Este script actualizará el repositorio local, detendrá los contenedores si están ejecutándose, construirá la imagen y levantará los contenedores.
-
-## Uso
-
-Es necesario ejecutar el script `update_and_run.sh` (o `.bat`) cada vez que trabajemos en el proyecto. Este script se encarga de actualizar el repositorio y levantar los contenedores.
-
-```bash
-# fichero update_and_run.sh
-git pull origin main
-docker-compose down
-docker-compose up --build -d 
-```
-Una vez tenemos el contenedor con la base de datos, ya podemos ejecutar la aplicacion backend y frontend.
-
-Desde el directorio backend:
-
-```node
-  nodemon app.js
-```
-Desde el directorio frontend:
-```node
-  npm start
-```
-Backend
-
+4.  **Entra en la carpeta frontend**
+    ```js
+    npm install
+    npm run build
+    npm start
+    ```    
 
 
 ## Acceso a los servicios
