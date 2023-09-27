@@ -17,6 +17,7 @@ Este proyecto permite desplegar un entorno de desarrollo que consta de dos conte
 ## Instrucciones de instalación
 
 ### Preparación
+Descargar e instalar la versión de Node 18.18 LTS desde aquí: https://nodejs.org/es/download
 
 Dependiendo de la arquitectura de tu procesador (x86 o arm64), hay que descomentar las líneas correspondientes en los ficheros `Dockerfile` y `.env`.
 
