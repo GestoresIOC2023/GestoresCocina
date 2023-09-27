@@ -51,7 +51,7 @@ Dependiendo de la arquitectura de tu procesador (x86 o arm64), hay que descoment
 4. **Entrar en la carpeta backend**
     ```js
     npm install
-    nodemon app.js
+    npm run dev
     ```
 
 5.  **Entrar en la carpeta frontend**
