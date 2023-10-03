@@ -15,19 +15,29 @@ const db = mysqlPromise.createPool({
   queueLimit: 0,
 });
 
-const getBossUsers = async (jobTitle) => {
+const getUsers = async (id) => {
   try {
     const [rows] = await db.execute(
-      'SELECT * FROM `users` WHERE job_title = ?;',
-      [jobTitle]
+      'SELECT * FROM `users` WHERE id = ?;',[id]
     );
     return rows;
   } catch (err) {
-    console.error('Error in getBossUsers:', err);
-    throw new Error('Could not retrieve boss users from database');
+    console.error('Error in getUsers:', err);
+    throw new Error('Could not retrieve users from database');
+  }
+};
+const insertUser = async ({id, email, nickname, update}) => {
+  try {
+    const [rows] = await db.execute(
+      'INSERT INTO `users` (id, email, nickname, update_at) VALUES(?,?,?,?);',[id, email, nickname, update]
+    );
+    return rows;
+  } catch (err) {
+    console.error('Error in insertUsers:', err);
+    throw new Error('Could not insert users from database');
   }
 };
 
 export default {
-  getBossUsers
+  getUsers, insertUser
 };
