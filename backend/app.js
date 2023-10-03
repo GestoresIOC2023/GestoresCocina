@@ -10,7 +10,7 @@ import { auth } from 'express-oauth2-jwt-bearer';
 
 const jwtCheck = auth({
   audience: 'http://localhost:5001',
-  issuerBaseURL: 'https://dev-mq772iuva16ltu3v.eu.auth0.com/',
+  issuerBaseURL: 'https://lacocinadetodos.eu.auth0.com/',
   tokenSigningAlg: 'RS256'
 });
 dotenv.config();
