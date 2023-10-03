@@ -1,22 +1,26 @@
-import model from '../models/model.js'
+import model from "../models/model.js";
 
-const getUsers = async (req, res) => {
+//Recupera usuario base de datos
+const getUser = async (req, res) => {
   try {
-    const users = await model.getUsers(req.query.id)
+    const users = await model.getUser(req.query.id);
     return res.status(200).json({ users });
   } catch (err) {
-    res.status(500).send('Error al obtener datos')
+    res.status(500).send("Error al obtener datos");
   }
-}
-const insertUser = async (req, res) => {
+};
+
+//introduce usuario base de datos
+const createUser= async (req, res) => {
   try {
     const data = req.body;
-    const users = await model.insertUser(data)
+    const users = await model.createUser(data);
     return res.status(201).json({ users });
   } catch (err) {
-    res.status(500).send('Error al insertar datos')
+    res.status(500).send("Error al insertar datos");
   }
-}
+};
 export default {
-  getUsers, insertUser
-}
+  getUser,
+  createUser,
+};

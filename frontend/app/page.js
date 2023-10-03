@@ -1,10 +1,11 @@
 import { getSession } from "@auth0/nextjs-auth0";
 import Link from "next/link";
+
 export default async function Home() {
   const session = await getSession();
   return (
     <>
-      <div className="h-screen flex justify-center items-center">
+      <div className="h-screen gap-4 flex justify-center items-center">
         {session ? (
           <a
             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 border border-red-700 rounded "
@@ -20,7 +21,7 @@ export default async function Home() {
             Login
           </a>
         )}
-      <Link href="/profile">Profile</Link>
+        <Link href="/profile">Ir a la pagina profile</Link>
       </div>
     </>
   );

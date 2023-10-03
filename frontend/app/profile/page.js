@@ -1,10 +1,13 @@
 import { getAccessToken } from "@auth0/nextjs-auth0";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { getSession } from "@auth0/nextjs-auth0";
+import Link from "next/link";
 
+//Pagina protegida
 export default withPageAuthRequired(
   async function Profile() {
-    async function insertUser() {
+
+    async function createUser() {
       const { user } = await getSession();
       const { accessToken } = await getAccessToken();
       await fetch("http://localhost:5001/api/v1/users", {
@@ -18,10 +21,11 @@ export default withPageAuthRequired(
           email: user.email,
           nickname: user.nickname,
           update: user.updated_at,
+          picture: user.picture,
         }),
       });
     }
-    async function getUsers() {
+    async function getUser() {
       const { user } = await getSession();
       const params = new URLSearchParams({
         id: user.sub,
@@ -38,21 +42,20 @@ export default withPageAuthRequired(
       const users = await response.json();
       return users;
     }
-    await insertUser();
-    const { users } = await getUsers();
-    console.log(users);
+    await createUser();
+    const { users } = await getUser();
     return (
       <div className="flex gap-6 justify-center py-10 items-center basis-1">
-          <p>Hello {users[0].nickname}</p>
+        <p>Hola {users[0].nickname}</p>
         <a
           className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 border border-red-700 rounded "
           href="/api/auth/logout"
         >
           Logout
         </a>
+        <Link href="/" >Ir a Home</Link>
       </div>
     );
   },
   { returnTo: "/profile" }
 );
-// You need to provide a `returnTo` since Server Components aren't aware of the page's URL

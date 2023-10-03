@@ -6,14 +6,17 @@ import compression from "compression";
 import controller from "./controllers/controller.js";
 import cors from "cors";
 import dotenv from "dotenv";
-import { auth } from 'express-oauth2-jwt-bearer';
+import { auth } from "express-oauth2-jwt-bearer";
+
 
 const jwtCheck = auth({
-  audience: 'http://localhost:5001',
-  issuerBaseURL: 'https://lacocinadetodos.eu.auth0.com/',
-  tokenSigningAlg: 'RS256'
+  audience: "http://localhost:5001",
+  issuerBaseURL: "https://lacocinadetodos.eu.auth0.com/",
+  tokenSigningAlg: "RS256",
 });
+
 dotenv.config();
+
 const __dirname = dirname(fileURLToPath(import.meta.url)) + sep,
   cfg = {
     port: process.env.PORT || 5001,
@@ -25,7 +28,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url)) + sep,
     },
     authRequired: false,
   };
+
 const app = express();
+
 app.use(cors());
 app.disable("x-powered-by");
 app.use(morgan("dev"));
@@ -40,5 +45,7 @@ app.listen(cfg.port, () => {
 app.get("/", (req, res) => {
   response.send("ok");
 });
-app.get("/api/v1/users", jwtCheck, controller.getUsers);
-app.post("/api/v1/users", jwtCheck, controller.insertUser);
+
+//endpoints protegidos
+app.get("/api/v1/users", jwtCheck, controller.getUser);
+app.post("/api/v1/users", jwtCheck, controller.createUser);
