@@ -1,5 +1,5 @@
-import dotenv from 'dotenv';
-import mysqlPromise from 'mysql2/promise';
+import dotenv from "dotenv";
+import mysqlPromise from "mysql2/promise";
 
 // Load .env configuration
 dotenv.config();
@@ -15,19 +15,31 @@ const db = mysqlPromise.createPool({
   queueLimit: 0,
 });
 
-const getBossUsers = async (jobTitle) => {
+const getUser = async (id) => {
+  try {
+    const [rows] = await db.execute("SELECT * FROM `users` WHERE id = ?;", [
+      id,
+    ]);
+    return rows;
+  } catch (err) {
+    console.error("Error in getUsers:", err);
+    throw new Error("Could not retrieve users from database");
+  }
+};
+const createUser = async ({ id, email, nickname, update, picture }) => {
   try {
     const [rows] = await db.execute(
-      'SELECT * FROM `users` WHERE job_title = ?;',
-      [jobTitle]
+      "INSERT INTO `users` (id, email, nickname, update_at, picture) VALUES(?,?,?,?,?);",
+      [id, email, nickname, update, picture]
     );
     return rows;
   } catch (err) {
-    console.error('Error in getBossUsers:', err);
-    throw new Error('Could not retrieve boss users from database');
+    console.error("Error in insertUsers:", err);
+    throw new Error("Could not insert users from database");
   }
 };
 
 export default {
-  getBossUsers
+  getUser,
+  createUser,
 };
