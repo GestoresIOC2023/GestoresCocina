@@ -8,13 +8,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { auth } from "express-oauth2-jwt-bearer";
 
-
-const jwtCheck = auth({
-  audience: "http://localhost:5001",
-  issuerBaseURL: "https://lacocinadetodos.eu.auth0.com/",
-  tokenSigningAlg: "RS256",
-});
-
 dotenv.config();
 
 const __dirname = dirname(fileURLToPath(import.meta.url)) + sep,
@@ -27,8 +20,13 @@ const __dirname = dirname(fileURLToPath(import.meta.url)) + sep,
       routes: __dirname + "routes" + sep,
     },
     authRequired: false,
+    jwtCheck: {
+      audience: process.env.AUDIENCE,
+      issuerBaseURL: process.env.ISSUERBASEURL,
+      TOCKENSIGNINGALG: process.env.TOCKENSIGNINGALG
+    }
   };
-
+const jwtCheck = auth(cfg.jwtCheck);
 const app = express();
 
 app.use(cors());
