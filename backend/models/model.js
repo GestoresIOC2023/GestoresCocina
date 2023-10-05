@@ -12,7 +12,7 @@ const db = mysqlPromise.createPool({
   password: process.env.MYSQL_PASSWORD,
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0,
+  queueLimit: 0
 });
 
 const getUser = async (id) => {
@@ -22,7 +22,7 @@ const getUser = async (id) => {
     ]);
     return rows;
   } catch (err) {
-    console.error("Error in getUsers:", err);
+      console.error("Error in getUsers:", err);
     throw new Error("Could not retrieve users from database");
   }
 };
@@ -34,12 +34,12 @@ const createUser = async ({ id, email, nickname, update, picture }) => {
     );
     return rows;
   } catch (err) {
-    console.error("Error in insertUsers:", err);
+      console.error("Error in insertUsers:", err);
     throw new Error("Could not insert users from database");
   }
 };
 
 export default {
   getUser,
-  createUser,
+  createUser
 };
