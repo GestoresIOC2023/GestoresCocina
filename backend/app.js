@@ -3,7 +3,8 @@ import morgan from "morgan";
 import { fileURLToPath } from "url";
 import { dirname, sep } from "path";
 import compression from "compression";
-import controller from "./controllers/controller.js";
+import userController from "./controllers/userController.js";
+import recipeController from "./controllers/recipeController.js";
 import cors from "cors";
 import dotenv from "dotenv";
 import { auth } from "express-oauth2-jwt-bearer";
@@ -45,5 +46,12 @@ app.get("/", (req, res) => {
 });
 
 //endpoints protegidos
-app.get("/api/v1/users", jwtCheck, controller.getUser);
-app.post("/api/v1/users", jwtCheck, controller.createUser);
+app.get("/api/v1/users", jwtCheck, userController.getUser);
+app.post("/api/v1/users", jwtCheck, userController.createUser);
+
+app.get("/api/v1/recipeById/:id", recipeController.getRecipe);
+
+app.post("/api/v1/recipe");
+app.patch("/api/v1/updateRecipeById/:id");
+app.get("/api/v1/ingredient/:name");
+app.post("/api/v1/ingredient/:name");

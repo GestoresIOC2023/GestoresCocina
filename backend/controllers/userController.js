@@ -1,4 +1,4 @@
-import model from "../models/model.js";
+import model from "../models/userModel.js";
 
 //Recupera usuario base de datos
 const getUser = async (req, res) => {
