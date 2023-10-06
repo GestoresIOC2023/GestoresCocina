@@ -12,7 +12,7 @@ dotenv.config();
 
 const __dirname = dirname(fileURLToPath(import.meta.url)) + sep,
   cfg = {
-    port: process.env.PORT || 5001,
+    port: process.env.EXPRESS_PORT || 5001,
     dir: {
       root: __dirname,
       controllers: __dirname + "controllers" + sep,
@@ -29,12 +29,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url)) + sep,
 const jwtCheck = auth(cfg.jwtCheck);
 const app = express();
 
-app.use(cors());
-app.disable("x-powered-by");
-app.use(morgan("dev"));
-app.use(compression());
+app.use(cors());//Necesario para conectar el front y el back
+app.disable("x-powered-by"); //Buena practica para hacer el sitio mas seguro ocultando la tecnologia con la que se ha desarrollado
+app.use(morgan("dev")); //Tipo de log que queremos que muestre morgan
+app.use(compression()); // reduce el tamaño de las respuestas del servidor haciendolo mas eficiente
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));//necesario para post
 
 app.listen(cfg.port, () => {
   console.log(`listening on port ${cfg.port}`);
