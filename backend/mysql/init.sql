@@ -30,6 +30,8 @@ CREATE TABLE category (
 CREATE TABLE recipe (
     recipe_id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
+    cook_time INT,
+    servings INT,
     recipe_picture VARCHAR(250),
     description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
