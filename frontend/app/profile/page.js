@@ -17,22 +17,23 @@ export default withPageAuthRequired(
           Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
-          id: user.sub,
+          user_id: user.sub,
           email: user.email,
           nickname: user.nickname,
-          update: user.updated_at,
-          picture: user.picture,
+          profile_picture: user.picture,
+          updated_at: user.updated_at,
         }),
       });
     }
     async function getUser() {
       const { user } = await getSession();
       const params = new URLSearchParams({
-        id: user.sub,
+        user_id: user.sub,
       });
       const { accessToken } = await getAccessToken();
+
       const response = await fetch(
-        "http://localhost:5001/api/v1/users?" + params.toString(),
+        "http://localhost:5001/api/v1/userById?" + params.toString(),
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

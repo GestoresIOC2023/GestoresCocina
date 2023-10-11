@@ -46,12 +46,12 @@ app.get("/", (req, res) => {
 });
 
 //endpoints protegidos
-app.get("/api/v1/users", jwtCheck, userController.getUser);
+app.get("/api/v1/userById?:user_id", jwtCheck, userController.getUser);
 app.post("/api/v1/users", jwtCheck, userController.createUser);
 
 app.get("/api/v1/recipeById/:id", recipeController.getRecipe);
 
-app.post("/api/v1/recipe");
-app.patch("/api/v1/updateRecipeById/:id");
-app.get("/api/v1/ingredient/:name");
-app.post("/api/v1/ingredient/:name");
+// app.post("/api/v1/recipe");
+// app.patch("/api/v1/updateRecipeById/:user_id");
+// app.get("/api/v1/ingredient/:name");
+// app.post("/api/v1/ingredient/:name");
