@@ -12,34 +12,36 @@ const db = mysqlPromise.createPool({
   password: process.env.MYSQL_PASSWORD,
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0,
+  queueLimit: 0
 });
 
 const getUser = async (id) => {
   try {
-    const [rows] = await db.execute("SELECT * FROM `users` WHERE id = ?;", [
-      id,
-    ]);
+    const [rows] = await db.execute("SELECT * FROM `user` WHERE user_id = ?;",
+     [id]);
     return rows;
   } catch (err) {
-    console.error("Error in getUsers:", err);
+      console.error("Error in getUsers:", err);
     throw new Error("Could not retrieve users from database");
   }
 };
-const createUser = async ({ id, email, nickname, update, picture }) => {
+const createUser = async ({ user_id, email, nickname, profile_picture, updated_at}) => {
+  const date = new Date(updated_at);
+  updated_at = date.toISOString().slice(0, 19).replace('T', ' ')
   try {
     const [rows] = await db.execute(
-      "INSERT INTO `users` (id, email, nickname, update_at, picture) VALUES(?,?,?,?,?);",
-      [id, email, nickname, update, picture]
+      
+      "INSERT INTO `user` (user_id, email, nickname, profile_picture, updated_at) VALUES(?,?,?,?,?);",
+      [user_id, email, nickname, profile_picture, updated_at]
     );
     return rows;
   } catch (err) {
-    console.error("Error in insertUsers:", err);
+      console.error("Error in insertUsers:", err);
     throw new Error("Could not insert users from database");
   }
 };
 
 export default {
   getUser,
-  createUser,
+  createUser
 };

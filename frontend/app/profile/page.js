@@ -1,7 +1,6 @@
 import { getAccessToken } from "@auth0/nextjs-auth0";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { getSession } from "@auth0/nextjs-auth0";
-import Link from "next/link";
 
 //Pagina protegida
 export default withPageAuthRequired(
@@ -17,22 +16,19 @@ export default withPageAuthRequired(
           Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
-          id: user.sub,
+          user_id: user.sub,
           email: user.email,
           nickname: user.nickname,
-          update: user.updated_at,
-          picture: user.picture,
+          profile_picture: user.picture,
+          updated_at: user.updated_at,
         }),
       });
-    }
+     }
     async function getUser() {
       const { user } = await getSession();
-      const params = new URLSearchParams({
-        id: user.sub,
-      });
       const { accessToken } = await getAccessToken();
       const response = await fetch(
-        "http://localhost:5001/api/v1/users?" + params.toString(),
+        `http://localhost:5001/api/v1/userById/${user.sub}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -45,15 +41,9 @@ export default withPageAuthRequired(
     await createUser();
     const { users } = await getUser();
     return (
-      <div className="flex gap-6 justify-center py-10 items-center basis-1">
-        <p>Hola {users[0].nickname}</p>
-        <a
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 border border-red-700 rounded "
-          href="/api/auth/logout"
-        >
-          Logout
-        </a>
-        <Link href="/" >Ir a Home</Link>
+      <div>
+      <h1 className="text-4xl text-center py-8">Pagina profile</h1>
+        <p className="px-4">Hola {users[0].nickname}</p>
       </div>
     );
   },
