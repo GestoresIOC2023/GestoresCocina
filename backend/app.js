@@ -46,8 +46,8 @@ app.get("/", (req, res) => {
 });
 
 //endpoints protegidos
-app.get("/api/v1/userById?:user_id", jwtCheck, userController.getUser);
-app.post("/api/v1/users", jwtCheck, userController.createUser);
+app.get("/api/v1/userById/:user_id", jwtCheck, userController.getUser);
+app.post("/api/v1/users", userController.createUser);
 
 app.get("/api/v1/recipeById/:id", recipeController.getRecipe);
 
