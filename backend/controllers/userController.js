@@ -20,7 +20,20 @@ const createUser= async (req, res) => {
     res.status(500).send("Error al insertar datos");
   }
 };
+
+//Actuliza datos del usuario
+const updateUser = async (req, res) => {
+  try {
+    const data = req.body;
+    const users = await model.updateUser(data);
+    return res.status(200).json({ users });
+  } catch (err) {
+    res.status(500).send("Error al actualizar datos del usuario");
+  }
+};
+
 export default {
   getUser,
   createUser,
+  updateUser
 };
