@@ -42,7 +42,7 @@ app.listen(cfg.port, () => {
 });
 
 app.get("/", (req, res) => {
-  response.send("ok");
+  res.send("ok");
 });
 
 //endpoints protegidos
