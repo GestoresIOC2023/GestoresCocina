@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useSearchParams } from 'next/navigation'
+export default function UserPage({email, nickname, profile_picture}) {
 
-export default function UserPage() {
   const [selectedFile, setSelectedFile] = useState();
-  const [previewImage, setPreviewImage] = useState("/woman.jpg");
+  const [previewImage, setPreviewImage] = useState(profile_picture);
 
   const handlerChange = (e) => {
     const file = e.target.files[0];
@@ -27,9 +28,9 @@ export default function UserPage() {
         <h1 className="text-center text-3xl p-4">Area personal</h1>
         <div className="flex flex-col border gap-4 border-1 p-2">
           <div className="flex justify-center">
-            <div className="relative w-56 h-56">
+            <div className="relative w-40 h-40">
               <Image
-                className="rounded-full shadow-2xl object-cover"
+                className="rounded-full object-cover"
                 fill
                 alt="Imagen"
                 src={previewImage}
@@ -77,7 +78,7 @@ export default function UserPage() {
             id="avatar"
             className="border-b-2 w-full px-2 py-2 text-lg focus:border-b-2 focus:border-gray-400 outline-none"
             type="text"
-            placeholder="Nombre usuario"
+            placeholder={nickname}
           />
         </div>
         <div className="py-4">
@@ -91,6 +92,7 @@ export default function UserPage() {
             placeholder="Descripcion"
           />
         </div>
+        <input className="bg-green-400 px-4 py-1 rounded-md" type="submit" value="Guardar" />
       </div>
     </form>
   );
