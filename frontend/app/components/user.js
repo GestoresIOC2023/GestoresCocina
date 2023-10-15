@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 export default function UserPage({ id, nickname, profile_picture }) {
-  const [selectedFile, setSelectedFile] = useState();
   const [previewImage, setPreviewImage] = useState(profile_picture);
 
   const {
@@ -17,7 +16,6 @@ export default function UserPage({ id, nickname, profile_picture }) {
   watch((data, { name, type }) => {
     if (name === "photo") {
       const file = data[name][0];
-      setSelectedFile(file);
       if (file) {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -32,14 +30,14 @@ export default function UserPage({ id, nickname, profile_picture }) {
 
   const onSubmit = async (data) => {
     const formData = new FormData();
-    formData.append('id', id);
-    formData.append('files', selectedFile);
-    formData.append('nickname', data.nickname);
-    formData.append('description', data.description);
-    console.log(formData)
+    formData.append("id", id);
+    formData.append("files", data.photo);
+    formData.append("nickname", data.nickname);
+    formData.append("description", data.description);
+    console.log(formData);
     await fetch("/api/update/user", {
       method: "PUT",
-      
+
       body: formData,
     });
   };
@@ -47,7 +45,7 @@ export default function UserPage({ id, nickname, profile_picture }) {
   return (
     <form
       className="flex flex-col h-screen p-5 justify-center items-center"
-      onSubmit={handleSubmit(onSubmit)} 
+      onSubmit={handleSubmit(onSubmit)}
     >
       <div className="md:w-[640px]">
         <h1 className="text-center text-3xl p-4">Area personal</h1>
@@ -103,7 +101,8 @@ export default function UserPage({ id, nickname, profile_picture }) {
             id="avatar"
             className="border-b-2 w-full px-2 py-2 text-lg focus:border-b-2 focus:border-gray-400 outline-none"
             type="text"
-            placeholder={nickname}
+            placeholder="Nombre usuario"
+            defaultValue={nickname}
             {...register("nickname", { required: true })}
           />
           {errors.nickname && <span>Este campo es requerido</span>}
@@ -124,6 +123,7 @@ export default function UserPage({ id, nickname, profile_picture }) {
           className="bg-green-400 px-4 py-1 rounded-md"
           type="submit"
           value="Guardar"
+          defaultValue={""}
         />
       </div>
     </form>
