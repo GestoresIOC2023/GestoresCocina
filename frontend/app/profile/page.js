@@ -1,11 +1,12 @@
 import { getAccessToken } from "@auth0/nextjs-auth0";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { getSession } from "@auth0/nextjs-auth0";
+import Link from "next/link";
+import UserPage from "../components/user";
 
 //Pagina protegida
 export default withPageAuthRequired(
   async function Profile() {
-
     async function createUser() {
       const { user } = await getSession();
       const { accessToken } = await getAccessToken();
@@ -23,7 +24,7 @@ export default withPageAuthRequired(
           updated_at: user.updated_at,
         }),
       });
-     }
+    }
     async function getUser() {
       const { user } = await getSession();
       const { accessToken } = await getAccessToken();
@@ -40,11 +41,9 @@ export default withPageAuthRequired(
     }
     await createUser();
     const { users } = await getUser();
+    console.log(users[0])
     return (
-      <div>
-      <h1 className="text-4xl text-center py-8">Pagina profile</h1>
-        <p className="px-4">Hola {users[0].nickname}</p>
-      </div>
+      <UserPage id={users[0].user_id} nickname={users[0].nickname} profile_picture={users[0].profile_picture}  />
     );
   },
   { returnTo: "/profile" }

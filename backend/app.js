@@ -1,5 +1,6 @@
 import express from "express";
 import morgan from "morgan";
+import  multer from "multer";
 import { fileURLToPath } from "url";
 import { dirname, sep } from "path";
 import compression from "compression";
@@ -28,6 +29,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url)) + sep,
     }
   };
 const jwtCheck = auth(cfg.jwtCheck);
+
+//Esta funcion sirve para poder subir archivos a express
+const upload = multer()
 const app = express();
 
 app.use(cors());//Necesario para conectar el front y el back
@@ -35,7 +39,7 @@ app.disable("x-powered-by"); //Buena practica para hacer el sitio mas seguro ocu
 app.use(morgan("dev")); //Tipo de log que queremos que muestre morgan
 app.use(compression()); // reduce el tamaño de las respuestas del servidor haciendolo mas eficiente
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));//necesario para post
+app.use(express.urlencoded({ extended: true }));
 
 app.listen(cfg.port, () => {
   console.log(`listening on port ${cfg.port}`);
@@ -47,7 +51,9 @@ app.get("/", (req, res) => {
 
 //endpoints protegidos
 app.get("/api/v1/userById/:user_id", jwtCheck, userController.getUser);
-app.post("/api/v1/users", userController.createUser);
+app.post("/api/v1/users", jwtCheck, userController.createUser);
+//se utiliza upload para poder subir ficheros a express
+app.put("/api/v1/users", jwtCheck, upload.array('files'), userController.updateUser);
 
 app.get("/api/v1/recipeById/:id", recipeController.getRecipe);
 

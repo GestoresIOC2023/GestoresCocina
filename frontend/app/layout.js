@@ -15,10 +15,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <UserProvider>
-        <body className={inter.className}>
-        <NavigationBar />
-        {children}
-        <Footer />
+        <body className={`min-h-screen flex flex-col ${inter.className}`}>
+          <NavigationBar />
+          <div className="flex-grow">{children}</div>
+          <Footer />
         </body>
       </UserProvider>
     </html>

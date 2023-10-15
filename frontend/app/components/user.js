@@ -2,34 +2,60 @@
 
 import Image from "next/image";
 import { useState } from "react";
-
-export default function UserPage() {
+import { useForm } from "react-hook-form";
+export default function UserPage({ id, nickname, profile_picture }) {
   const [selectedFile, setSelectedFile] = useState();
-  const [previewImage, setPreviewImage] = useState("/woman.jpg");
+  const [previewImage, setPreviewImage] = useState(profile_picture);
 
-  const handlerChange = (e) => {
-    const file = e.target.files[0];
-    setSelectedFile(file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setPreviewImage(null);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  watch((data, { name, type }) => {
+    if (name === "photo") {
+      const file = data[name][0];
+      setSelectedFile(file);
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreviewImage(reader.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setPreviewImage(null);
+      }
     }
+  });
+
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+    formData.append('id', id);
+    formData.append('files', selectedFile);
+    formData.append('nickname', data.nickname);
+    formData.append('description', data.description);
+    console.log(formData)
+    await fetch("/api/update/user", {
+      method: "PUT",
+      
+      body: formData,
+    });
   };
 
   return (
-    <form className="flex flex-col h-screen p-5 justify-center items-center">
+    <form
+      className="flex flex-col h-screen p-5 justify-center items-center"
+      onSubmit={handleSubmit(onSubmit)} 
+    >
       <div className="md:w-[640px]">
         <h1 className="text-center text-3xl p-4">Area personal</h1>
         <div className="flex flex-col border gap-4 border-1 p-2">
           <div className="flex justify-center">
-            <div className="relative w-56 h-56">
+            <div className="relative w-40 h-40">
               <Image
-                className="rounded-full shadow-2xl object-cover"
+                className="rounded-full object-cover"
                 fill
                 alt="Imagen"
                 src={previewImage}
@@ -65,7 +91,7 @@ export default function UserPage() {
               type="file"
               accept="image/png, image/jpeg, image/webp"
               className="hidden"
-              onChange={handlerChange}
+              {...register("photo")}
             />
           </div>
         </div>
@@ -77,8 +103,10 @@ export default function UserPage() {
             id="avatar"
             className="border-b-2 w-full px-2 py-2 text-lg focus:border-b-2 focus:border-gray-400 outline-none"
             type="text"
-            placeholder="Nombre usuario"
+            placeholder={nickname}
+            {...register("nickname", { required: true })}
           />
+          {errors.nickname && <span>Este campo es requerido</span>}
         </div>
         <div className="py-4">
           <label className="text-lg block py-2" htmlFor="usuario">
@@ -89,8 +117,14 @@ export default function UserPage() {
             className="border h-52 w-full px-2 py-2 text-lg focus:border-2 focus:border-gray-400 outline-none"
             type="te"
             placeholder="Descripcion"
+            {...register("description")}
           />
         </div>
+        <input
+          className="bg-green-400 px-4 py-1 rounded-md"
+          type="submit"
+          value="Guardar"
+        />
       </div>
     </form>
   );
