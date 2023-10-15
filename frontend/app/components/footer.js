@@ -1,22 +1,24 @@
+import Image from "next/image";
+
 const Footer = () => {
-    return (
-        <footer className="bg-2D3142 text-white p-6">
-        <div className="text-center">
-          <img src="/logo_white.png" alt="Logo" className="w-48 mx-auto" />
-        </div>
-        <ul className="text-center mt-4">
-          <li className="inline-block mx-4">
-            <a href="/politica-de-cookies">Política de cookies</a>
-          </li>
-          <li className="inline-block mx-4">
-            <a href="/politica-de-privacidad">Política de privacidad</a>
-          </li>
-          <li className="inline-block mx-4">
-            <a href="/aviso-legal">Aviso legal</a>
-          </li>
-        </ul>
-      </footer>
-    )
+  return (
+    <footer className=" px-4 py-3 flex flex-col gap-2 items-center bg-black text-white">
+      <div className="relative w-12 h-12">
+        <Image fill src="/logo_white.png" alt="Logo"/>
+      </div>
+      <ul className="text-center flex gap-3 px-4 items-center">
+        <li>
+          <a href="/politica-de-cookies">Política de cookies</a>
+        </li>
+        <li>
+          <a href="/politica-de-privacidad">Política de privacidad</a>
+        </li>
+        <li>
+          <a href="/aviso-legal">Aviso legal</a>
+        </li>
+      </ul>
+    </footer>
+  );
 };
 
 export default Footer;

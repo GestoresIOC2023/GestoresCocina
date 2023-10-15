@@ -43,7 +43,7 @@ export default withPageAuthRequired(
     const { users } = await getUser();
     console.log(users[0])
     return (
-      <UserPage email={users[0].email} nickname={users[0].nickname} profile_picture={users[0].profile_picture}  />
+      <UserPage id={users[0].user_id} nickname={users[0].nickname} profile_picture={users[0].profile_picture}  />
     );
   },
   { returnTo: "/profile" }

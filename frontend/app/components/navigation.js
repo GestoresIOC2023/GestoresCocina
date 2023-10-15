@@ -1,9 +1,14 @@
 import { getSession } from "@auth0/nextjs-auth0";
 import Link from "next/link";
+import Image from "next/image";
+
 export default async function NavigationBar() {
     const session = await getSession();
   return (
-    <div className="flex px-5 py-4 bg-black text-white items-center">
+    <div className="flex px-5 py-3 bg-black text-white items-center">
+     <div className="relative w-12 h-12">
+        <Image fill src="/logo_white.png" alt="Logo"/>
+      </div>
       <nav className="grow">
         <ul className="flex justify-center gap-2">
           <li><Link href="/">Home</Link></li>

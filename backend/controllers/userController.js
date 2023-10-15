@@ -22,9 +22,22 @@ const createUser= async (req, res) => {
 };
 
 //Actuliza datos del usuario
+/*
+  Falta guardar la foto en express y actualizar el nickname de la base de datos y la
+  url de la foto en express en la base de datos.
+
+  Si pudieras agregar un campo con la descripcion del usuario tambien se podria
+  actualizar tambien. Si no lo quito.
+*/
 const updateUser = async (req, res) => {
   try {
-    const data = req.body;
+    //El archivo de la foto
+    const photo = req.files;
+    // los datos del usuario
+    const user_id = req.body.id;
+    const nickname = req.body.nickname;
+    const description = req.body.description;
+    
     const users = await model.updateUser(data);
     return res.status(200).json({ users });
   } catch (err) {
