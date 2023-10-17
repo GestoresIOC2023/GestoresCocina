@@ -55,9 +55,15 @@ app.post("/api/v1/users", jwtCheck, userController.createUser);
 //se utiliza upload para poder subir ficheros a express
 app.put("/api/v1/users", jwtCheck, upload.array('files'), userController.updateUser);
 
-app.get("/api/v1/recipeById/:id", recipeController.getRecipe);
+//recipes
+app.get("/api/v1/recipes/:id",jwtCheck, recipeController.getRecipe);
+app.get("/api/v1/getRecipesSortedByDate", jwtCheck, recipeController.getRecipesSortedByDate);
+app.get("/api/v1/getRecipesSortedByScore",jwtCheck, recipeController.getRecipesSortedByScore);
+app.post("/api/v1/recipe",jwtCheck, recipeController.postRecipe);
+app.delete("/api/v1/recipe/:recipe_id",jwtCheck, recipeController.deleteRecipe);
+app.patch("/api/v1/recipe/:recipe_id",jwtCheck, recipeController.upadteRecipe);
 
-// app.post("/api/v1/recipe");
-// app.patch("/api/v1/updateRecipeById/:user_id");
+
+
 // app.get("/api/v1/ingredient/:name");
 // app.post("/api/v1/ingredient/:name");
