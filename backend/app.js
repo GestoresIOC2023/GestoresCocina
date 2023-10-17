@@ -20,6 +20,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url)) + sep,
       controllers: __dirname + "controllers" + sep,
       models: __dirname + "models" + sep,
       routes: __dirname + "routes" + sep,
+
     },
     authRequired: false,
     jwtCheck: {
@@ -31,7 +32,16 @@ const __dirname = dirname(fileURLToPath(import.meta.url)) + sep,
 const jwtCheck = auth(cfg.jwtCheck);
 
 //Esta funcion sirve para poder subir archivos a express
-const upload = multer()
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, 'public/uploads/')
+  },
+  filename: function (req, file, cb) {
+
+      cb(null, `${file.originalname}`)
+  }
+});
+const upload = multer({storage});
 const app = express();
 
 app.use(cors());//Necesario para conectar el front y el back
@@ -40,6 +50,7 @@ app.use(morgan("dev")); //Tipo de log que queremos que muestre morgan
 app.use(compression()); // reduce el tamaño de las respuestas del servidor haciendolo mas eficiente
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname + 'public'));
 
 app.listen(cfg.port, () => {
   console.log(`listening on port ${cfg.port}`);
@@ -49,11 +60,12 @@ app.get("/", (req, res) => {
   res.send("ok");
 });
 
+
 //endpoints protegidos
 app.get("/api/v1/userById/:user_id", jwtCheck, userController.getUser);
 app.post("/api/v1/users", jwtCheck, userController.createUser);
 //se utiliza upload para poder subir ficheros a express
-app.put("/api/v1/users", jwtCheck, upload.array('files'), userController.updateUser);
+app.put("/api/v1/users", jwtCheck, upload.single('file'), userController.updateUser);
 
 app.get("/api/v1/recipeById/:id", recipeController.getRecipe);
 

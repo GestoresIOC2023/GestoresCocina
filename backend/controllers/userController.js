@@ -31,14 +31,14 @@ const createUser= async (req, res) => {
 */
 const updateUser = async (req, res) => {
   try {
-    //El archivo de la foto
-    const photo = req.files;
-    // los datos del usuario
-    const user_id = req.body.id;
-    const nickname = req.body.nickname;
-    const description = req.body.description;
-    
-    const users = await model.updateUser(data);
+    let photo;
+    if(req.file){
+       photo = "http://localhost:5001/uploads/" + req.file.originalname;
+    }else{
+      photo = req.body.profile_picture;
+    }
+    const user = {...req.body, profile_picture: photo}
+    const users = await model.updateUser(user);
     return res.status(200).json({ users });
   } catch (err) {
     res.status(500).send("Error al actualizar datos del usuario");

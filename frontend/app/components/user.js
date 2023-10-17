@@ -3,9 +3,8 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-export default function UserPage({ id, nickname, profile_picture }) {
+export default function UserPage({ user_id, nickname, profile_picture }) {
   const [previewImage, setPreviewImage] = useState(profile_picture);
-
   const {
     register,
     handleSubmit,
@@ -13,7 +12,7 @@ export default function UserPage({ id, nickname, profile_picture }) {
     formState: { errors },
   } = useForm();
 
-  watch((data, { name, type }) => {
+  watch((data, { name }) => {
     if (name === "photo") {
       const file = data[name][0];
       if (file) {
@@ -30,14 +29,16 @@ export default function UserPage({ id, nickname, profile_picture }) {
 
   const onSubmit = async (data) => {
     const formData = new FormData();
-    formData.append("id", id);
-    formData.append("files", data.photo);
+    formData.append("user_id", user_id);
+    if (data.photo[0]){
+      formData.append("file", data.photo[0]);
+    }else{
+      formData.append("profile_picture", profile_picture);
+    }
     formData.append("nickname", data.nickname);
     formData.append("description", data.description);
-    console.log(formData);
     await fetch("/api/update/user", {
       method: "PUT",
-
       body: formData,
     });
   };
@@ -116,6 +117,7 @@ export default function UserPage({ id, nickname, profile_picture }) {
             className="border h-52 w-full px-2 py-2 text-lg focus:border-2 focus:border-gray-400 outline-none"
             type="te"
             placeholder="Descripcion"
+            defaultValue={""}
             {...register("description")}
           />
         </div>
@@ -123,7 +125,6 @@ export default function UserPage({ id, nickname, profile_picture }) {
           className="bg-green-400 px-4 py-1 rounded-md"
           type="submit"
           value="Guardar"
-          defaultValue={""}
         />
       </div>
     </form>

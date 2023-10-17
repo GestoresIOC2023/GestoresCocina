@@ -40,15 +40,15 @@ const createUser = async ({ user_id, email, nickname, profile_picture, updated_a
     throw new Error("Could not insert users from database");
   }
 };
-const updateUser = async ({ user_id, email, nickname, profile_picture, updated_at}) => {
-  const date = new Date(updated_at);
-  updated_at = date.toISOString().slice(0, 19).replace('T', ' ')
+const updateUser = async ({ user_id, nickname, profile_picture}) => {
+  const date = new Date();
+  const updated_at = date.toISOString().slice(0, 19).replace('T', ' ')
   try {
     const [rows] = await db.execute(
-      "UPDATE `user` SET email=?, nickname=?, profile_picture=?, updated_at=? WHERE user_id=?;",
-      [email, nickname, profile_picture, updated_at, user_id]
-    );
-    return rows;
+      "UPDATE user SET nickname = ?, profile_picture = ?, updated_at = ? WHERE user_id = ?;",
+      [nickname, profile_picture, updated_at, user_id]
+      );
+      return rows;
   } catch (err) {
       console.error("Error in updateUser:", err);
     throw new Error("Could not update user in the database");
