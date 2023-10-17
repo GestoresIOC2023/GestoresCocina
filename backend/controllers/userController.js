@@ -38,8 +38,15 @@ const updateUser = async (req, res) => {
     const nickname = req.body.nickname;
     const description = req.body.description;
     
+    // Crear objeto "data" con lo datos del usuario 
+    const data = {
+      user_id,
+      nickname,
+      description
+    };
+    
     const users = await model.updateUser(data);
-    return res.status(200).json({ users });
+    return res.status(200).json({ user: updateUser });
   } catch (err) {
     res.status(500).send("Error al actualizar datos del usuario");
   }
