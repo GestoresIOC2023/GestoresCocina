@@ -4,14 +4,18 @@ import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 export default function UserPage({ user_id, nickname, profile_picture }) {
+  //Estado para mostrar la imagen antes de subirla
   const [previewImage, setPreviewImage] = useState(profile_picture);
+  //Estado para habilitar boton si se ha producido un cambio
+  const [isUpdate, setIsUptdate] = useState(true);
+  //Hook para guardar los valores de los formularios, controlar errores y
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
-
+  //Escucha si hay un cambio en el input de la foto para previsualizarla
   watch((data, { name }) => {
     if (name === "photo") {
       const file = data[name][0];
@@ -25,22 +29,25 @@ export default function UserPage({ user_id, nickname, profile_picture }) {
         setPreviewImage(null);
       }
     }
+    setIsUptdate(false);
   });
-
+  //Envia los datos al servidor Expres a traves de la ruta /api/update/user
   const onSubmit = async (data) => {
     const formData = new FormData();
+    //Si no se ha subido ninguna foto nueva envia la ruta actual de la foto
     formData.append("user_id", user_id);
-    if (data.photo[0]){
+    if (data.photo[0]) {
       formData.append("file", data.photo[0]);
-    }else{
-      formData.append("profile_picture", profile_picture);
     }
     formData.append("nickname", data.nickname);
     formData.append("description", data.description);
-    await fetch("/api/update/user", {
+    const response = await fetch("/api/update/user", {
       method: "PUT",
       body: formData,
     });
+    if(response.status === 200){
+      setIsUptdate(true);
+    }
   };
 
   return (
@@ -63,7 +70,7 @@ export default function UserPage({ user_id, nickname, profile_picture }) {
           </div>
           <div className="flex justify-center">
             <label
-              className="text-lg bg-blue-400 rounded-md px-3 py-1"
+              className=" bg-blue-400 rounded-md px-4 py-1"
               htmlFor="avatar"
             >
               <span className="px-1">
@@ -73,7 +80,7 @@ export default function UserPage({ user_id, nickname, profile_picture }) {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-6 h-6 inline"
+                  className="w-5 h-5 inline"
                 >
                   <path
                     strokeLinecap="round"
@@ -106,7 +113,7 @@ export default function UserPage({ user_id, nickname, profile_picture }) {
             defaultValue={nickname}
             {...register("nickname", { required: true })}
           />
-          {errors.nickname && <span>Este campo es requerido</span>}
+          {errors.nickname && <span className="text-red-500">Este campo es requerido</span>}
         </div>
         <div className="py-4">
           <label className="text-lg block py-2" htmlFor="usuario">
@@ -122,9 +129,10 @@ export default function UserPage({ user_id, nickname, profile_picture }) {
           />
         </div>
         <input
-          className="bg-green-400 px-4 py-1 rounded-md"
+          className="bg-green-400 px-4 py-1 rounded-md disabled:bg-gray-500"
           type="submit"
           value="Guardar"
+          disabled={isUpdate}
         />
       </div>
     </form>

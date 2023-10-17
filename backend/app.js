@@ -29,9 +29,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url)) + sep,
       TOCKENSIGNINGALG: process.env.TOCKENSIGNINGALG
     }
   };
+
+//funcion para controlar que endpoints necesitan autentificación
 const jwtCheck = auth(cfg.jwtCheck);
 
-//Esta funcion sirve para poder subir archivos a express
+//direccion donde se almacenan las fotos
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
       cb(null, 'public/uploads/')

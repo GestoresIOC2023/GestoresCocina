@@ -31,7 +31,7 @@ export default withPageAuthRequired(
       const response = await fetch(
         `http://localhost:5001/api/v1/userById/${user.sub}`,
         {
-          cache: 'no-cache',
+          cache: "no-cache",
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -40,9 +40,12 @@ export default withPageAuthRequired(
       const users = await response.json();
       return users;
     }
-    await createUser();
-    const { users } = await getUser();
-    console.log(users[0]);
+    let users;
+    ({ users } = await getUser());
+    if (!users.length) {
+      const result = await createUser();
+      ({ users } = result);
+    }
     return <UserPage {...users[0]} />;
   },
   { returnTo: "/profile" }

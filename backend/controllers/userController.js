@@ -32,12 +32,13 @@ const createUser= async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     let photo;
+    let user = {...req.body};
+    //Si se ha subido la foto se guarda en la base de datos con la url de la photo
+    //No se si la ruta se puede crear de otra manera en vez de un string.
     if(req.file){
-       photo = "http://localhost:5001/uploads/" + req.file.originalname;
-    }else{
-      photo = req.body.profile_picture;
+      photo = "http://localhost:5001/uploads/" + req.file.originalname;
+      user = {...user, profile_picture:photo}
     }
-    const user = {...req.body, profile_picture: photo}
     const users = await model.updateUser(user);
     return res.status(200).json({ users });
   } catch (err) {
