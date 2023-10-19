@@ -1,0 +1,15 @@
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 20px;
+}
+
+.individual-card-container {
+  transition: transform .2s, box-shadow .2s, background-color .3s;  }
+  
+
+.individual-card-container:hover {
+  transform: scale(1.01);
+  
+}
