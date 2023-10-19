@@ -34,8 +34,22 @@ const getRecipesSortedByRating = async () => {
     throw new Error("Could not retrieve recipes from database");
   }
 };
+const addNewRecipes = async (recipe) => {
+  console.log(recipe.title)
+  try {
+    const [rows] = await db.execute("INSERT into `recipe` (title, cook_time, servings, recipe_picture, description, user_id) VALUES (?,?,?,?,?,?)",
+      [recipe.title, recipe.time, recipe.servings, recipe.url_image, recipe.instructions, 1]
+    );
+    return rows;
+  } catch (err) {
+    console.log("Error insertando recetas", err);
+    throw new Error("Could not insert recipes on database");
+
+  }
+}
 
 export default {
   getRecipesSortedByDate,
-  getRecipesSortedByRating
+  getRecipesSortedByRating,
+  addNewRecipes
 }
