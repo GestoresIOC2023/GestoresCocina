@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import mysqlPromise from "mysql2/promise";
 
 // Load .env configuration
-dotenv.config();
+dotenv.config({ path: '../.env' })
 
 const db = mysqlPromise.createPool({
   host: process.env.MYSQL_HOST,
@@ -35,10 +35,9 @@ const getRecipesSortedByRating = async () => {
   }
 };
 const addNewRecipes = async (recipe) => {
-  console.log(recipe.title)
   try {
     const [rows] = await db.execute("INSERT into `recipe` (title, cook_time, servings, recipe_picture, description, user_id) VALUES (?,?,?,?,?,?)",
-      [recipe.title, recipe.time, recipe.servings, recipe.url_image, recipe.instructions, 1]
+      [recipe.title, recipe.time, recipe.servings, recipe.url_image, recipe.instructions, recipe.user_id]
     );
     return rows;
   } catch (err) {
@@ -46,10 +45,21 @@ const addNewRecipes = async (recipe) => {
     throw new Error("Could not insert recipes on database");
 
   }
+
 }
+
+const closeDatabase = async () => {
+  try {
+    await db.end();
+    console.log('Database pool cerrado');
+  } catch (err) {
+    console.log('Error cerrado el database pool', err);
+  }
+};
 
 export default {
   getRecipesSortedByDate,
   getRecipesSortedByRating,
-  addNewRecipes
+  addNewRecipes,
+  closeDatabase
 }
