@@ -46,7 +46,7 @@ const addNewRecipes = async (numberOfRecipes, userID) => {
   for (const newRecipe of recipes) {
     try{
       await recipesModel.addNewRecipes(newRecipe); 
-      console.log(`Creada receta: ${newRecipe.title} `)
+      console.log(`Receta creada: ${newRecipe.title} `)
     }catch{
       console.log (`Error creando receta`)    
     }

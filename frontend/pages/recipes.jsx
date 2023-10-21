@@ -25,8 +25,8 @@ const Recipes = () => {
     <div>
       <h1>Lista de Recetas</h1>
       <div className="card-container">
-  {recipes.map((recipe, key) => (
-    <div key={key} className="individual-card-container">
+  {recipes.map((recipe) => (
+    <div key={recipe.key} className="individual-card-container">
       {createCard(recipe)}
     </div>
   ))}
