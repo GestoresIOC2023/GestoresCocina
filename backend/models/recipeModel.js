@@ -57,9 +57,34 @@ const closeDatabase = async () => {
   }
 };
 
+const deleteRecipe = async (id) =>{
+  try {
+    const [rows] = await db.execute("DELETE from `recipe` WHERE recipe_id = ? ",
+    [id])
+    return rows
+  }catch (err) {
+    console.error("Error borrando receta:", err);
+    throw new Error(`No se puede eliminar la receta con id ${id}`);
+  }
+};
+
+const getRecipe = async (id) => {
+  try {
+    const [rows] = await db.execute("SELECT * FROM `recipe` WHERE recipe_id = ?", [id]);
+    if (rows.length === 0) {
+      throw new Error(`No se puede encontrar la receta con id ${id}`);
+    }
+    return rows[0];
+  } catch (err) {
+    throw err;
+  }
+};
+
 export default {
   getRecipesSortedByDate,
   getRecipesSortedByRating,
   addNewRecipes,
-  closeDatabase
+  closeDatabase,
+  deleteRecipe,
+  getRecipe
 }
