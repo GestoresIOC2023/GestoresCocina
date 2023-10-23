@@ -29,20 +29,6 @@ const getRecipesSortedByRating = async (req, res) => {
     res.status(500).send("Error al obtener las recetas ordenadas por valoración");
   }
 }
-const fetchRecipeById = async (recipe_id) => {
-  //para qe
-  try {
-    return await recipesModel.getRecipe(recipe_id);
-  } catch (error) {
-    console.log(error);
-    throw new Error('Error al obtener la receta');
-  }
-};
-
-
-// const postRecipe = (req, res) => {
-
-// }
 
 const deleteRecipe = async (req, res) => {
   const recipe_id = req.params.recipe_id; 
@@ -61,6 +47,11 @@ const deleteRecipe = async (req, res) => {
     res.status(500).send(`Error al eliminar la receta con el ID ${recipe_id}`);
   }
 };
+
+
+// const postRecipe = (req, res) => {
+
+// }
 
 
 // const upadteRecipe = (req, res) => {
