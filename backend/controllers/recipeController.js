@@ -1,6 +1,5 @@
 import recipesModel from '../models/recipeModel.js'
 
-
 const getRecipe = async (req, res) => {
   const recipe_id = req.params.recipe_id;
 
@@ -31,27 +30,40 @@ const getRecipesSortedByRating = async (req, res) => {
 }
 
 const deleteRecipe = async (req, res) => {
-  const recipe_id = req.params.recipe_id; 
+  const recipe_id = req.params.recipe_id;
   try {
     const recipe = await recipesModel.getRecipe(recipe_id);
-    console.log(recipe); 
-
-    if (recipe.length === 0) { 
+    if (recipe.length === 0) {
       return res.status(404).send(`No se puede encontrar la receta con el ID ${recipe_id}`);
     }
-
-    await recipesModel.deleteRecipe(recipe_id); 
+    await recipesModel.deleteRecipe(recipe_id);
     res.status(200).send(`Receta ${recipe_id} eliminada`);
-  } catch (error) { 
+  } catch (error) {
     console.log(error);
     res.status(500).send(`Error al eliminar la receta con el ID ${recipe_id}`);
   }
 };
 
 
-// const postRecipe = (req, res) => {
-
-// }
+const postRecipe = async (req, res) => {
+  const recipe = {
+    title: req.body.title,
+    time: parseInt(req.body.time),
+    servings:parseInt(req.body.servings),
+    url_image:req.body.url_image,
+    instructions:req.body.instructions,
+    user_id: parseInt(req.body.user_id)
+  }
+  try {
+    await recipesModel.addNewRecipe(recipe)
+   //res.json(recipe).status(200).send(`Receta creada`);
+   
+  } catch {
+    console.log(`Error creando receta`)
+    //res.status(500).send(`Error creando receta`)
+  }
+  res.json(recipe)
+}
 
 
 // const upadteRecipe = (req, res) => {
@@ -61,7 +73,7 @@ const deleteRecipe = async (req, res) => {
 
 export default {
   getRecipe,
-  //postRecipe,
+  postRecipe,
   deleteRecipe,
   //upadteRecipe,
   getRecipesSortedByDate,
