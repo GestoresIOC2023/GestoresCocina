@@ -1,6 +1,7 @@
+'use client';
 import React, { useState, useEffect } from "react";
 import RecipeReviewCard from "@/app/components/RecipeReviewCard"
-import '../styles/styles.css'
+import '../../styles/styles.css'
 function createCard(recipe) {
   return (
     <RecipeReviewCard
