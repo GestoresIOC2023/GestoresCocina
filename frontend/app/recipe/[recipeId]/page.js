@@ -3,7 +3,7 @@
 import RecipeDetail from '@/app/components/RecipeDetail';
 import { useEffect, useState } from 'react';
 
-export default function Page({params}) {
+export default function Recipe({params}) {
     
     const {recipeId} = params;
     const [recipeData, setRecipeData] = useState({});

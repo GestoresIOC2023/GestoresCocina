@@ -14,6 +14,9 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Link from '@mui/material/Link';
+import { CardActionArea } from '@mui/material';
+
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -34,7 +37,10 @@ export default function RecipeReviewCard(props) {
   };
 
   return (
+   
       <Card sx={{ maxWidth: 345 }}>
+       <CardActionArea>
+       <Link href={props.recipeDetailUrl} underline='none'> 
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -107,6 +113,8 @@ export default function RecipeReviewCard(props) {
             </Typography> */}
           </CardContent>
         </Collapse>
+        </Link>
+        </CardActionArea>
       </Card>
 
   );
