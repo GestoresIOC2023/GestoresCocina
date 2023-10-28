@@ -3,6 +3,9 @@ import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { getSession } from "@auth0/nextjs-auth0";
 import Link from "next/link";
 import UserPage from "../components/user";
+import { Button } from "@mui/material";
+import CreateRecipe from "../components/createRecipe";
+import MenuUser from "../components/menuUser";
 
 //Pagina protegida
 export default withPageAuthRequired(
@@ -46,7 +49,12 @@ export default withPageAuthRequired(
       const result = await createUser();
       ({ users } = result);
     }
-    return <UserPage {...users[0]} />;
+
+
+
+    return (
+      <MenuUser users={users} /> 
+    );
   },
   { returnTo: "/profile" }
 );
