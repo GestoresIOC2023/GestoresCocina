@@ -15,6 +15,9 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Link from '@mui/material/Link';
+import { CardActionArea } from '@mui/material';
+
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -35,21 +38,25 @@ export default function RecipeReviewCard(props) {
   };
 
   return (
-      <Card sx={{ maxWidth: 345 }}>
-        <CardHeader
-          avatar={
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
 
-            </Avatar>
-          }
-          action={
-            <IconButton aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
-          }
-          title={props.title}
-          subheader={props.updated.split("T")[0]}
-        />
+    <Card sx={{ maxWidth: 345 }}>
+
+
+      <CardHeader
+        avatar={
+          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+
+          </Avatar>
+        }
+        action={
+          <IconButton aria-label="settings">
+            <MoreVertIcon />
+          </IconButton>
+        }
+        title={props.title}
+        subheader={props.updated.split("T")[0]}
+      />
+      <CardActionArea href={props.recipeDetailUrl}>
         <CardMedia
           component="img"
           height="194"
@@ -61,28 +68,30 @@ export default function RecipeReviewCard(props) {
             {props.desc}
           </Typography> */}
         </CardContent>
-        <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label="share">
-            <ShareIcon />
-          </IconButton>
-          <ExpandMore
-            expand={expanded}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="show more"
-          >
-            <ExpandMoreIcon />
-          </ExpandMore>
-        </CardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent>
+      </CardActionArea>
+      
+      <CardActions disableSpacing>
+        <IconButton aria-label="add to favorites">
+          <FavoriteIcon />
+        </IconButton>
+        <IconButton aria-label="share">
+          <ShareIcon />
+        </IconButton>
+        <ExpandMore
+          expand={expanded}
+          onClick={handleExpandClick}
+          aria-expanded={expanded}
+          aria-label="show more"
+        >
+          <ExpandMoreIcon />
+        </ExpandMore>
+      </CardActions>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardContent>
           <Typography paragraph component="div" dangerouslySetInnerHTML={{ __html: props.desc }} />
 
 
-            {/* <Typography paragraph>
+          {/* <Typography paragraph>
               Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
               aside for 10 minutes.
             </Typography>
@@ -106,9 +115,10 @@ export default function RecipeReviewCard(props) {
             <Typography>
               Set aside off of the heat to let rest for 10 minutes, and then serve.
             </Typography> */}
-          </CardContent>
-        </Collapse>
-      </Card>
+        </CardContent>
+      </Collapse>
+
+    </Card>
 
   );
 }

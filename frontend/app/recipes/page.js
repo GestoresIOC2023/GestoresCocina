@@ -1,16 +1,29 @@
+<<<<<<< HEAD
 'use client'
 
 import React, { useState, useEffect } from "react";
 import RecipeReviewCard from "../components/RecipeReviewCard"
 import '../../styles/styles.css'
+=======
+'use client';
+import React, { useState, useEffect } from "react";
+import RecipeReviewCard from "@/app/components/RecipeReviewCard"
+import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
+import Grow from '@mui/material/Grow';
+
+
+//import '../../styles/styles.css'
+
+>>>>>>> 2dfdc7a55e358a7084271395b5e3c6fc95c15101
 function createCard(recipe) {
   return (
     <RecipeReviewCard
-      key={recipe.recipe_id}
+      id={recipe.recipe_id}
       title={recipe.title}
       img={recipe.recipe_picture}
       desc={recipe.description}
       updated={recipe.updated_at}
+      recipeDetailUrl={`/recipe/${recipe.recipe_id}`}
     />
   );
 }
@@ -26,16 +39,17 @@ const Recipes = () => {
   return (
     <div>
       <h1>Lista de Recetas</h1>
-      <div className="card-container">
-  {recipes.map((recipe) => (
-    <div key={recipe.key} className="individual-card-container">
-      {createCard(recipe)}
+      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+        {recipes.map((recipe) => (
+          <Grid xs={3} sm={4} md={4} key={recipe.id}>
+           {createCard(recipe)}
+          </Grid>
+        ))}
+      </Grid>
     </div>
-  ))}
-</div>
 
-    </div>
   );
 };
 
 export default Recipes;
+

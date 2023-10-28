@@ -13,7 +13,7 @@ export default async function NavigationBar() {
         <ul className="flex justify-center gap-2">
           <li><Link href="/">Home</Link></li>
           <li><Link href="/profile">Profile</Link></li>
-          <li><Link href="/recipes">Recipes</Link></li>
+          <li><Link href="/recipes">Last recipes</Link></li>
         </ul>
       </nav>
       <div className="">
