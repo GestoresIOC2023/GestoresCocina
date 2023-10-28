@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-'use client'
-
-import React, { useState, useEffect } from "react";
-import RecipeReviewCard from "../components/RecipeReviewCard"
-import '../../styles/styles.css'
-=======
 'use client';
 import React, { useState, useEffect } from "react";
 import RecipeReviewCard from "@/app/components/RecipeReviewCard"
@@ -14,7 +7,6 @@ import Grow from '@mui/material/Grow';
 
 //import '../../styles/styles.css'
 
->>>>>>> 2dfdc7a55e358a7084271395b5e3c6fc95c15101
 function createCard(recipe) {
   return (
     <RecipeReviewCard
