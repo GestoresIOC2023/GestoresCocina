@@ -53,7 +53,7 @@ export default function UserPage({ user_id, nickname, profile_picture, className
   return (
     <div className={className}>
       <form
-        className="flex flex-col h-screen p-5 justify-start items-center"
+        className="flex flex-col  p-5 justify-start items-center bg-[#F6E9E0] "
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="w-full">
