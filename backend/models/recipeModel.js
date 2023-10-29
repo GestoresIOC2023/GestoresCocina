@@ -80,28 +80,14 @@ const getRecipe = async (id) => {
   }
 };
 
-const getRecipeByCategory = async (category) => {
-  const allowedCategories = ['veryHealthy', 'vegetarian', 'dairyFree', 'glutenFree'];
-
-  if (!allowedCategories.includes(category)) {
-    throw new Error("Categoría no permitida");
-  }
-
-  try {
-    const query = `SELECT * FROM recipe WHERE ${category} = 1`;
-    const [rows] = await db.execute(query);
-    return rows;
-  } catch (err) {
-    throw err;
-  }
-};
-
 export default {
   getRecipesSortedByDate,
   getRecipesSortedByRating,
   addNewRecipe,
   closeDatabase,
   deleteRecipe,
+  getRecipe,
+  getIngredientsByRecipeId,
   getRecipe,
   getRecipeByCategory
 }
