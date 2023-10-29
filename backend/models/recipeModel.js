@@ -80,6 +80,35 @@ const getRecipe = async (id) => {
   }
 };
 
+const getRecipeByCategory = async (category) => {
+  const allowedCategories = ['veryHealthy', 'vegetarian', 'dairyFree', 'glutenFree'];
+
+  if (!allowedCategories.includes(category)) {
+    throw new Error("Categoría no permitida");
+  }
+
+  try {
+    const query = `SELECT * FROM recipe WHERE ${category} = 1`;
+    const [rows] = await db.execute(query);
+    return rows;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getIngredientsByRecipeId = async (id) => {
+  try {
+    const [rows] = await db.execute("SELECT ingredient_name, quantity FROM recipe_ingredient ri JOIN ingredient i ON ri.ingredient_id = i.ingredient_id  WHERE ri.recipe_id = ?", [id]);
+    if (rows.length === 0) {
+      throw new Error(`No se puede encontrar los ingrediente de la receta con id ${id}`);
+    }
+    return rows;
+  } catch (err) {
+    throw err;
+  }
+};
+
+
 export default {
   getRecipesSortedByDate,
   getRecipesSortedByRating,
@@ -87,7 +116,6 @@ export default {
   closeDatabase,
   deleteRecipe,
   getRecipe,
-  getIngredientsByRecipeId,
-  getRecipe,
-  getRecipeByCategory
+  getRecipeByCategory,
+  getIngredientsByRecipeId
 }
