@@ -21,7 +21,7 @@ const addNewRecipes = async (numberOfRecipes, userID) => {
           url_image: data.recipes[0].image,
           summary: data.recipes[0].summary,
           instructions: data.recipes[0].instructions,
-          category: data.recipes[0].diets,
+          //category: data.recipes[0].diets,
           vegetarian:data.recipes[0].vegetarian,
           glutenFree:data.recipes[0].glutenFree,
           dairyFree:data.recipes[0].dairyFree,
@@ -50,7 +50,7 @@ const addNewRecipes = async (numberOfRecipes, userID) => {
   for (const newRecipe of recipes) {
     try{
       await recipesModel.addNewRecipe(newRecipe); 
-      console.log(`Receta creada: ${newRecipe.title} `)
+      console.log(`Receta creada: ${newRecipe.title}`)
     }catch{
       console.log (`Error creando receta`)    
     }

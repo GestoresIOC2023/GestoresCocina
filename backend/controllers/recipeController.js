@@ -77,6 +77,19 @@ const postRecipe = async (req, res) => {
   res.json(recipe);
 };
 
+const getRecipeByCategory = async (req ,res) => {
+  const category = req.params.category;
+  try {
+    const recipes = await recipesModel.getRecipeByCategory(category);
+    return res.status(200).json({ recipes });
+  } catch {
+    res
+      .status(500)
+      .send("Error al obtener las recetas por categoria");
+  }
+
+
+}
 // const upadteRecipe = (req, res) => {
 //   const recipe = req.params.id;
 
@@ -104,4 +117,5 @@ export default {
   getRecipesSortedByDate,
   getRecipesSortedByRating,
   getIngredientsByRecipeId,
+  getRecipeByCategory
 };

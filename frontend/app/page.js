@@ -42,32 +42,29 @@ function CardWithGrowEffect({ recipe, index }) {
 
 const Home = () => {
   const [recipes, setRecipes] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
-    fetch('/api/v1/getRecipesSortedByDate')
+    let url = '/api/v1/getRecipesSortedByDate';
+
+    if (selectedCategory) {
+      url = `/api/v1/recipesByCat/${selectedCategory}`;
+    }
+
+    fetch(url)
       .then((response) => response.json())
       .then((data) => setRecipes(data.recipes));
-  }, []);
+  }, [selectedCategory]);
+
+  function categorySelected(category) {
+    setSelectedCategory(category);
+  }
 
   return (
     <>
-     <Header />
-     <Categories />
-    <React.Fragment>
-      <CssBaseline />
-      <Container maxWidth="xl">
-     
-      <Grid container spacing={{ xs: 3, md: 3 }} columns={{ xs: 3, sm: 8, md: 12, xl:12 }}>
-          {recipes.map((recipe, index) => (
-            <Grid xs={3} sm={4} md={4} xl={4} key={recipe.id}>
-                    {recipe && recipe.user_id && (
-                  <CardWithGrowEffect recipe={recipe} index={index} />
-                )}
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-    </React.Fragment>
+      <Header />
+      <Categories sel={categorySelected} />
+      <LoadAllRecipes recipes={recipes} />
     </>
   );
 

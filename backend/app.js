@@ -76,6 +76,7 @@ app.get("/api/v1/getRecipesSortedByScore", recipeController.getRecipesSortedByRa
 app.post("/api/v1/recipes", upload.single('file'), recipeController.postRecipe);
 app.delete("/api/v1/recipes/:recipe_id", recipeController.deleteRecipe);
 app.get('/api/v1/recipes/:recipe_id/ingredients', recipeController.getIngredientsByRecipeId);
+app.get("/api/v1/recipesByCat/:category", recipeController.getRecipeByCategory);
 // app.patch("/api/v1/recipe/:recipe_id",jwtCheck, recipeController.upadteRecipe);
 
 //get recipes by userID
