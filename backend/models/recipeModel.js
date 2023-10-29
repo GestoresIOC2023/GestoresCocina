@@ -35,10 +35,9 @@ const getRecipesSortedByRating = async () => {
   }
 };
 const addNewRecipe = async (recipe) => {
-  console.log(recipe)
   try {
-    const [rows] = await db.execute("INSERT into `recipe` (title, cook_time, servings, recipe_picture, description, user_id) VALUES (?,?,?,?,?,?)",
-      [recipe.title, recipe.time, recipe.servings, recipe.url_image, recipe.instructions, recipe.user_id]
+    const [rows] = await db.execute("INSERT into `recipe` (title, cook_time, servings, recipe_picture, description, user_id, vegetarian, glutenFree,dairyFree,veryHealthy) VALUES (?,?,?,?,?,?,?,?,?,?)",
+      [recipe.title, recipe.time, recipe.servings, recipe.url_image, recipe.instructions, recipe.user_id, recipe.vegetarian, recipe.glutenFree, recipe.dairyFree, recipe.veryHealthy]
     );
     return rows;
   } catch (err) {

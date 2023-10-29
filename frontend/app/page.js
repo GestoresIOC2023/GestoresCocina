@@ -29,6 +29,11 @@ function CardWithGrowEffect({ recipe, index }) {
           desc={recipe.description}
           updated={recipe.updated_at}
           recipeDetailUrl={`/recipe/${recipe.recipe_id}`}
+          //categorias
+          vegetarian={recipe.vegetarian}
+          glutenFree={recipe.glutenFree}
+          dairyFree={recipe.dairyFree}
+          veryHealthy={recipe.veryHealthy}
         />
       </div>
     </Grow>

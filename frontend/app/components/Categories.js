@@ -6,25 +6,25 @@ import Typography from '@mui/material/Typography';
 
 const images = [
   {
-    id:1001,
+    id:"#1001",
     url: '/categories/Healthy-Eating-Tips.jpg',
     title: 'Healthy',
     width: '25%',
   },
   {
-    id:1002,
+    id:'#1002',
     url: '/categories/vegetarian.webp',
     title: 'Vegan',
     width: '25%',
   },
   {
-    id:1003,
+    id:'#1003',
     url: '/categories/lactose.jpeg',
     title: 'Dairy Free',
     width: '25%',
   },
   {
-    id:1004,
+    id:'#1004',
     url: '/categories/Gluten-Free-Image.jpg',
     title: 'Gluten Free',
     width: '25%',
@@ -98,14 +98,14 @@ const ImageMarked = styled('span')(({ theme }) => ({
 
 export default function Categorias() {
   function handleOnClick(e){
-    console.log(e.target.value)
+    console.log(e)
   
   }
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%',  marginBottom: '10%' }}>
       {images.map((image) => (
         <ImageButton
-          onClick={handleOnClick}
+          onClick={() => handleOnClick(image.id)}
           focusRipple
           value={image.title}
           key={image.title}

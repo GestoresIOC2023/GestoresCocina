@@ -52,7 +52,12 @@ const postRecipe = async (req, res) => {
     servings:parseInt(req.body.servings),
     url_image:req.body.url_image,
     instructions:req.body.instructions,
-    user_id: parseInt(req.body.user_id)
+    user_id: parseInt(req.body.user_id),
+    vegetarian:req.body.vegetarian,
+    glutenFree:req.body.glutenFree,
+    dairyFree:req.body.dairyFree,
+    veryHealthy:req.body.veryHealthy
+
   }
   try {
     await recipesModel.addNewRecipe(recipe)
