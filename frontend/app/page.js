@@ -61,13 +61,6 @@ const Home = () => {
         </Grid>
       </Container>
     </React.Fragment>
-
-
-
-
-
-
-
     </>
   );
 

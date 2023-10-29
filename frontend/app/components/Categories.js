@@ -3,7 +3,6 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
-import { Grid } from '@mui/material';
 
 const images = [
   {
@@ -96,13 +95,19 @@ const ImageMarked = styled('span')(({ theme }) => ({
   transition: theme.transitions.create('opacity'),
 }));
 
+
 export default function Categorias() {
+  function handleOnClick(e){
+    console.log(e.target.value)
+  
+  }
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%',  marginBottom: '10%' }}>
       {images.map((image) => (
-        
         <ImageButton
+          onClick={handleOnClick}
           focusRipple
+          value={image.title}
           key={image.title}
           style={{
             width: image.width,
