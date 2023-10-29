@@ -50,12 +50,10 @@ const deleteRecipe = async (req, res) => {
 
 const postRecipe = async (req, res) => {
   console.log(req.body);
-  let photo;
   let recipe = {
     title: req.body.title,
     time: parseInt(req.body.time),
     servings: parseInt(req.body.servings),
-    url_image: req.body.url_image,
     instructions: req.body.instructions,
     user_id: req.body.user_id,
     vegetarian:req.body.vegetarian,
@@ -64,8 +62,9 @@ const postRecipe = async (req, res) => {
     veryHealthy:req.body.veryHealthy
 
   };
+  console.log(recipe)
   if (req.file) {
-    photo = "http://localhost:5001/uploads/" + req.file.originalname;
+    const photo = "http://localhost:5001/uploads/" + req.file.originalname;
     recipe = { ...recipe, url_image: photo };
   }
   try {

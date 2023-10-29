@@ -3,7 +3,12 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-export default function UserPage({ user_id, nickname, profile_picture, className }) {
+export default function UserPage({
+  user_id,
+  nickname,
+  profile_picture,
+  className,
+}) {
   //Estado para mostrar la imagen antes de subirla
   const [previewImage, setPreviewImage] = useState(profile_picture);
   //Estado para habilitar boton si se ha producido un cambio
@@ -18,15 +23,17 @@ export default function UserPage({ user_id, nickname, profile_picture, className
   //Escucha si hay un cambio en el input de la foto para previsualizarla
   watch((data, { name }) => {
     if (name === "photo") {
-      const file = data[name][0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setPreviewImage(reader.result);
-        };
-        reader.readAsDataURL(file);
-      } else {
-        setPreviewImage(null);
+      if (data[name][0]) {
+        const file = data[name][0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setPreviewImage(reader.result);
+          };
+          reader.readAsDataURL(file);
+        } else {
+          setPreviewImage(null);
+        }
       }
     }
     setIsUptdate(false);

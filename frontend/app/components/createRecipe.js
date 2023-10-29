@@ -21,13 +21,23 @@ export default function CreateRecipe({ user_id }) {
   const [ingredient, setIngredient] = useState();
   const [quantity, setQuantity] = useState();
   const [ingredients, setAddIngredient] = useState([]);
-  const [isUpdate, setIsUptdate] = useState(true);
 
   const handleIngredient = (e) => {
     setIngredient(e.target.value);
   };
   const handleQuantity = (e) => {
     setQuantity(e.target.value);
+  };
+  const setIsChecked = (value, formValue) => {
+    if (
+      formValue.healthy ||
+      formValue.dairy_free ||
+      formValue.vegan ||
+      formValue.gluten_free
+    ) {
+      return true;
+    }
+    return false;
   };
   const handleAddIngredients = (e) => {
     const newIngredients = [...ingredients];
@@ -54,18 +64,19 @@ export default function CreateRecipe({ user_id }) {
 
   watch((data, { name }) => {
     if (name === "photoRecipe") {
-      const file = data[name][0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setPreviewImageRecipes(reader.result);
-        };
-        reader.readAsDataURL(file);
-      } else {
-        setPreviewImageRecipes(null);
+      if (data[name][0]) {
+        const file = data[name][0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setPreviewImageRecipes(reader.result);
+          };
+          reader.readAsDataURL(file);
+        } else {
+          setPreviewImageRecipes(null);
+        }
       }
     }
-    setIsUptdate(false);
   });
 
   const onSubmit = async (data) => {
@@ -79,16 +90,16 @@ export default function CreateRecipe({ user_id }) {
     formData.append("title", data.title);
     formData.append("time", data.cook_time);
     formData.append("servings", data.servings);
+    formData.append("vegetarian", data.vegan || null);
+    formData.append("glutenFree", data.gluten_free || null);
+    formData.append("dairyFree", data.dairy_free || null);
+    formData.append("veryHealthy", data.healthy || null);
     formData.append("file", data.photoRecipe);
 
-    const response = await fetch("/api/update/recipes", {
+    await fetch("/api/update/recipes", {
       method: "POST",
       body: formData,
     });
-    console.log(response);
-    if (response.status === 200) {
-      setIsUptdate(true);
-    }
   };
 
   return (
@@ -205,21 +216,47 @@ export default function CreateRecipe({ user_id }) {
           </div>
           <div className="grid grid-cols-2">
             <FormControlLabel
-              label="Categoria 1"
-              control={<Checkbox value={1} />}
+              label="Healthy"
+              control={
+                <Checkbox
+                  value={"Healthy"}
+                  {...register("healthy", { validate: setIsChecked })}
+                />
+              }
             />
             <FormControlLabel
-              label="Categoria 2"
-              control={<Checkbox value={2} />}
+              label="Vegan"
+              control={
+                <Checkbox
+                  value={"Vegan"}
+                  {...register("vegan", { validate: setIsChecked })}
+                />
+              }
             />
             <FormControlLabel
-              label="Categoria 3"
-              control={<Checkbox value={3} />}
+              label="Dairy Free"
+              control={
+                <Checkbox
+                  value={"Dairy Free"}
+                  {...register("dairy_free", { validate: setIsChecked })}
+                />
+              }
             />
             <FormControlLabel
-              label="Categoria 4"
-              control={<Checkbox value={4} />}
+              label="Gluten Free"
+              control={
+                <Checkbox
+                  value={"Gluten Free"}
+                  {...register("gluten_free", { validate: setIsChecked })}
+                />
+              }
             />
+            {errors.healthy &&
+              errors.dairy_free &&
+              errors.vegan &&
+              errors.gluten_free && (
+                <span className="text-red-500">Este campo es requerido</span>
+              )}
           </div>
           <div className="flex flex-col py-4">
             <TextareaAutosize
@@ -229,10 +266,11 @@ export default function CreateRecipe({ user_id }) {
               maxRows={10}
               {...register("description", { required: true })}
             />
-            {errors.title && (
+            {errors.description && (
               <span className="text-red-500">Este campo es requerido</span>
             )}
           </div>
+
           <input
             className="bg-green-400 px-4 py-1 rounded-md disabled:bg-gray-500 max-w-fit"
             type="submit"
