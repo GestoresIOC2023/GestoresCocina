@@ -14,7 +14,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-export default function CreateRecipe() {
+export default function CreateRecipe({ user_id }) {
   const [previewImageRecipe, setPreviewImageRecipes] = useState(
     "/8810f0fa-6017-4643-ae33-8ce63ebde66a.jpg"
   );
@@ -53,7 +53,7 @@ export default function CreateRecipe() {
   } = useForm();
 
   watch((data, { name }) => {
-    if (name === "photoRecipes") {
+    if (name === "photoRecipe") {
       const file = data[name][0];
       if (file) {
         const reader = new FileReader();
@@ -68,9 +68,32 @@ export default function CreateRecipe() {
     setIsUptdate(false);
   });
 
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    if (data.photoRecipe[0]) {
+      formData.append("file", data.photoRecipe[0]);
+    }
+    formData.append("ingredient", data.ingredient);
+    formData.append("instructions", data.description);
+    formData.append("title", data.title);
+    formData.append("time", data.cook_time);
+    formData.append("servings", data.servings);
+    formData.append("file", data.photoRecipe);
+
+    const response = await fetch("/api/update/recipes", {
+      method: "POST",
+      body: formData,
+    });
+    console.log(response);
+    if (response.status === 200) {
+      setIsUptdate(true);
+    }
+  };
+
   return (
-    <form className="min-h-screen">
-      <Container maxWidth="sm" className="flex flex-col p-10 items-center">
+    <form className="min-h-screen" onSubmit={handleSubmit(onSubmit)}>
+      <Container maxWidth="sm" className="flex flex-col p-10 items-center ">
         <div className="relative w-full h-96">
           <Image
             className="object-cover p-9"
@@ -81,9 +104,9 @@ export default function CreateRecipe() {
             placeholder="empty"
           ></Image>
         </div>
-        <div className="flex justify-center pb-4">
+        <div className="flex flex-col justify-center items-center pb-4">
           <label
-            className=" bg-blue-400 rounded-md px-4 py-1"
+            className=" bg-blue-400 rounded-md px-4 py-1 max-w-fit"
             htmlFor="recipes"
           >
             <span className="px-1">
@@ -110,13 +133,19 @@ export default function CreateRecipe() {
             type="file"
             accept="image/png, image/jpeg, image/webp"
             className="hidden"
-            {...register("photoRecipes")}
+            {...register("photoRecipe", { required: true })}
           />
+          <div>
+            {errors.title && (
+              <span className="text-red-500">Este campo es requerido</span>
+            )}
+          </div>
         </div>
         <div className="flex flex-col gap-5 w-full">
           <TextField
             label="Titulo"
             {...register("title", { required: true, pattern: "[0-9]*" })}
+            {...register("title")}
           />
           {errors.title && (
             <span className="text-red-500">Este campo es requerido</span>
@@ -128,12 +157,19 @@ export default function CreateRecipe() {
             InputProps={{
               endAdornment: <InputAdornment position="end">min</InputAdornment>,
             }}
+            {...register("cook_time", { required: true })}
           />
+          {errors.title && (
+            <span className="text-red-500">Este campo es requerido</span>
+          )}
           <TextField
             label="Servings"
             InputProps={{ type: "number" }}
             {...register("servings")}
           />
+          {errors.title && (
+            <span className="text-red-500">Este campo es requerido</span>
+          )}
           <div className="flex flex-col">
             <div className="flex flex-row gap-5 items-end justify-start">
               <TextField
@@ -142,12 +178,14 @@ export default function CreateRecipe() {
                 onChange={handleIngredient}
                 className="w-2/3"
               />
+
               <TextField
                 label="Cantidad"
                 onChange={handleQuantity}
                 value={quantity}
                 className="w-1/3"
               />
+
               <IconButton onClick={handleAddIngredients}>
                 <AddIcon />
               </IconButton>
@@ -189,10 +227,18 @@ export default function CreateRecipe() {
               className="grow p-3 resize-none border border-gray-200 outline-none"
               minRows={10}
               maxRows={10}
+              {...register("description", { required: true })}
             />
+            {errors.title && (
+              <span className="text-red-500">Este campo es requerido</span>
+            )}
           </div>
+          <input
+            className="bg-green-400 px-4 py-1 rounded-md disabled:bg-gray-500 max-w-fit"
+            type="submit"
+            value="Guardar"
+          />
         </div>
-        
       </Container>
     </form>
   );

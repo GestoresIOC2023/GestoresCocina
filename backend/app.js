@@ -73,7 +73,7 @@ app.put("/api/v1/users", jwtCheck, upload.single('file'), userController.updateU
 app.get("/api/v1/recipes/:recipe_id", recipeController.getRecipe);
 app.get("/api/v1/getRecipesSortedByDate", recipeController.getRecipesSortedByDate);
 app.get("/api/v1/getRecipesSortedByScore", recipeController.getRecipesSortedByRating);
-app.post("/api/v1/recipes", recipeController.postRecipe);
+app.post("/api/v1/recipes", upload.single('file'), recipeController.postRecipe);
 app.delete("/api/v1/recipes/:recipe_id", recipeController.deleteRecipe);
 // app.patch("/api/v1/recipe/:recipe_id",jwtCheck, recipeController.upadteRecipe);
 

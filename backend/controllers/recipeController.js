@@ -1,4 +1,4 @@
-import recipesModel from '../models/recipeModel.js'
+import recipesModel from "../models/recipeModel.js";
 
 const getRecipe = async (req, res) => {
   const recipe_id = req.params.recipe_id;
@@ -9,7 +9,7 @@ const getRecipe = async (req, res) => {
   } catch {
     res.status(500).send("Error al obtener la receta");
   }
-}
+};
 
 const getRecipesSortedByDate = async (req, res) => {
   try {
@@ -18,23 +18,27 @@ const getRecipesSortedByDate = async (req, res) => {
   } catch {
     res.status(500).send("Error al obtener las recetas ordenadas por fecha");
   }
-}
+};
 
 const getRecipesSortedByRating = async (req, res) => {
   try {
     const recipes = await recipesModel.getRecipesSortedByRating();
     return res.status(200).json({ recipes });
   } catch {
-    res.status(500).send("Error al obtener las recetas ordenadas por valoración");
+    res
+      .status(500)
+      .send("Error al obtener las recetas ordenadas por valoración");
   }
-}
+};
 
 const deleteRecipe = async (req, res) => {
   const recipe_id = req.params.recipe_id;
   try {
     const recipe = await recipesModel.getRecipe(recipe_id);
     if (recipe.length === 0) {
-      return res.status(404).send(`No se puede encontrar la receta con el ID ${recipe_id}`);
+      return res
+        .status(404)
+        .send(`No se puede encontrar la receta con el ID ${recipe_id}`);
     }
     await recipesModel.deleteRecipe(recipe_id);
     res.status(200).send(`Receta ${recipe_id} eliminada`);
@@ -44,32 +48,30 @@ const deleteRecipe = async (req, res) => {
   }
 };
 
-
 const postRecipe = async (req, res) => {
-  const recipe = {
+  console.log(req.body);
+  let photo;
+  let recipe = {
     title: req.body.title,
     time: parseInt(req.body.time),
-    servings:parseInt(req.body.servings),
-    url_image:req.body.url_image,
-    instructions:req.body.instructions,
-    user_id: parseInt(req.body.user_id),
-    vegetarian:req.body.vegetarian,
-    glutenFree:req.body.glutenFree,
-    dairyFree:req.body.dairyFree,
-    veryHealthy:req.body.veryHealthy
-
+    servings: parseInt(req.body.servings),
+    url_image: req.body.url_image,
+    instructions: req.body.instructions,
+    user_id: req.body.user_id,
+  };
+  if (req.file) {
+    photo = "http://localhost:5001/uploads/" + req.file.originalname;
+    recipe = { ...recipe, url_image: photo };
   }
   try {
-    await recipesModel.addNewRecipe(recipe)
-   //res.json(recipe).status(200).send(`Receta creada`);
-   
+    await recipesModel.addNewRecipe(recipe);
+    //res.json(recipe).status(200).send(`Receta creada`);
   } catch {
-    console.log(`Error creando receta`)
+    console.log(`Error creando receta`);
     //res.status(500).send(`Error creando receta`)
   }
-  res.json(recipe)
-}
-
+  res.json(recipe);
+};
 
 // const upadteRecipe = (req, res) => {
 //   const recipe = req.params.id;
@@ -82,5 +84,5 @@ export default {
   deleteRecipe,
   //upadteRecipe,
   getRecipesSortedByDate,
-  getRecipesSortedByRating
-}
+  getRecipesSortedByRating,
+};
