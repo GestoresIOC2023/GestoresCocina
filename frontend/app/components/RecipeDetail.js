@@ -1,7 +1,7 @@
 import React from 'react';
 import "../styles/recipeDetail.css";
 
-const RecipeDetail = ({ recipeData }) => {
+const RecipeDetail = ({ recipeData, ingredients}) => {
   return (
     <div>
       <div className='info-general'>
@@ -29,6 +29,11 @@ const RecipeDetail = ({ recipeData }) => {
       <div className='ingredients-preparation'>
         <div className='ingredients'>
           <h2 className='name-ig-pr'>INGREDIENTES   </h2>
+          <ul className='name-ig'>
+            {ingredients && ingredients.map((ingredient, index) => (
+              <li key={index}>{ingredient.quantity} de {ingredient.ingredient_name} </li>
+            ))}
+          </ul>
         </div>
         <div className='preparation'>
           <h2 className='name-ig-pr'>PREPARACIÓN</h2>
