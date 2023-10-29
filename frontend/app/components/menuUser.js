@@ -7,7 +7,7 @@ import {Container } from "@mui/material";
 import ButtonProfile from "./buttonProfile";
 
 export default function MenuUser({ users }) {
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(2);
 
   const handleButtonPage = (e) => {
     setPage(e.target.id);
