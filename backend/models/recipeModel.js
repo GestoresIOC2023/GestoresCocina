@@ -81,11 +81,25 @@ const getRecipe = async (id) => {
   }
 };
 
+const getIngredientsByRecipeId = async (id) => {
+  try {
+    const [rows] = await db.execute("SELECT ingredient_name, quantity FROM recipe_ingredient ri JOIN ingredient i ON ri.ingredient_id = i.ingredient_id  WHERE ri.recipe_id = ?", [id]);
+    if (rows.length === 0) {
+      throw new Error(`No se puede encontrar los ingrediente de la receta con id ${id}`);
+    }
+    return rows;
+  } catch (err) {
+    throw err;
+  }
+};
+
+
 export default {
   getRecipesSortedByDate,
   getRecipesSortedByRating,
   addNewRecipe,
   closeDatabase,
   deleteRecipe,
-  getRecipe
+  getRecipe,
+  getIngredientsByRecipeId
 }

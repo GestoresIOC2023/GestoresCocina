@@ -78,6 +78,20 @@ const postRecipe = async (req, res) => {
 
 // }
 
+
+//Obtener ingredientes a partir del ID de una receta
+
+
+const getIngredientsByRecipeId = async (req, res) => {
+  const recipeId = req.params.recipe_id;
+  try {
+    const ingredients = await recipesModel.getIngredientsByRecipeId(recipeId);
+    return res.status(200).json( {ingredients} );
+  } catch (error) {
+    res.status(500).send("Error al obtener los ingredientes");
+  }
+};
+
 export default {
   getRecipe,
   postRecipe,
@@ -85,4 +99,5 @@ export default {
   //upadteRecipe,
   getRecipesSortedByDate,
   getRecipesSortedByRating,
+  getIngredientsByRecipeId,
 };
