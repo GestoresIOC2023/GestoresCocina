@@ -58,6 +58,11 @@ const postRecipe = async (req, res) => {
     url_image: req.body.url_image,
     instructions: req.body.instructions,
     user_id: req.body.user_id,
+    vegetarian:req.body.vegetarian,
+    glutenFree:req.body.glutenFree,
+    dairyFree:req.body.dairyFree,
+    veryHealthy:req.body.veryHealthy
+
   };
   if (req.file) {
     photo = "http://localhost:5001/uploads/" + req.file.originalname;

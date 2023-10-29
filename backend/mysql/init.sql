@@ -16,6 +16,11 @@ CREATE TABLE category (
     category_name VARCHAR(50) NOT NULL
 );
 
+INSERT INTO category (category_name) VALUES ('vegetarian');
+INSERT INTO category (category_name) VALUES ('glutenFree');
+INSERT INTO category (category_name) VALUES ('dairyFree');
+INSERT INTO category (category_name) VALUES ('veryHealthy');
+
 -- Taula de recepta
 CREATE TABLE recipe (
     recipe_id INT AUTO_INCREMENT PRIMARY KEY,
