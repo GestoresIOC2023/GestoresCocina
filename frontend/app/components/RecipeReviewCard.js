@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { Card, CardActionArea, CardMedia, CardContent, Avatar, IconButton, Box, Rating } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -7,16 +6,16 @@ export default function RecipeReviewCard(props) {
   return (
     <Card sx={{ maxWidth: 494, position: 'relative', borderRadius: '16px' }}>
       <CardActionArea href={props.recipeDetailUrl}>
-      <div className='relative w-full h-80'>
-        <Image
-        className='object-cover'
-          src={props.img}
-          fill
-          image={props.img}
-          alt={props.title}
-        />
+        <div className='relative w-full h-80'>
+          <Image
+            className='object-cover'
+            src={props.img}
+            fill
+            image={props.img}
+            alt={props.title}
+          />
 
-      </div>
+        </div>
 
         <CardContent
           sx={{
