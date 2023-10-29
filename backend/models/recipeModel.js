@@ -57,12 +57,12 @@ const closeDatabase = async () => {
   }
 };
 
-const deleteRecipe = async (id) =>{
+const deleteRecipe = async (id) => {
   try {
     const [rows] = await db.execute("DELETE from `recipe` WHERE recipe_id = ? ",
-    [id])
+      [id])
     return rows
-  }catch (err) {
+  } catch (err) {
     console.error("Error borrando receta:", err);
     throw new Error(`No se puede eliminar la receta con id ${id}`);
   }
@@ -80,11 +80,28 @@ const getRecipe = async (id) => {
   }
 };
 
+const getRecipeByCategory = async (category) => {
+  const allowedCategories = ['veryHealthy', 'vegetarian', 'dairyFree', 'glutenFree'];
+
+  if (!allowedCategories.includes(category)) {
+    throw new Error("Categoría no permitida");
+  }
+
+  try {
+    const query = `SELECT * FROM recipe WHERE ${category} = 1`;
+    const [rows] = await db.execute(query);
+    return rows;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export default {
   getRecipesSortedByDate,
   getRecipesSortedByRating,
   addNewRecipe,
   closeDatabase,
   deleteRecipe,
-  getRecipe
+  getRecipe,
+  getRecipeByCategory
 }
