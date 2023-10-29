@@ -46,21 +46,23 @@ const Home = () => {
 
   return (
     <>
-     <Header />
-     <Categories />
-    <React.Fragment>
-      <CssBaseline />
-      <Container maxWidth="xl">
-     
-      <Grid container spacing={{ xs: 3, md: 3 }} columns={{ xs: 3, sm: 8, md: 12, xl:12 }}>
-          {recipes.map((recipe, index) => (
-            <Grid xs={3} sm={4} md={4} xl={4} key={recipe.id}>
-              <CardWithGrowEffect recipe={recipe} index={index} />
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-    </React.Fragment>
+      <Header />
+      <Categories />
+      <React.Fragment>
+        <CssBaseline />
+        <Container maxWidth="xl">
+
+          <Grid container spacing={{ xs: 3, md: 3 }} columns={{ xs: 3, sm: 8, md: 12, xl: 12 }}>
+            {recipes.map((recipe, index) => (
+              <Grid xs={3} sm={4} md={4} xl={4} key={recipe.id}>
+                {recipe && recipe.user && (
+                  <CardWithGrowEffect recipe={recipe} index={index} />
+                )}
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </React.Fragment>
     </>
   );
 
