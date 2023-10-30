@@ -59,7 +59,8 @@ const postRecipe = async (req, res) => {
     vegetarian:req.body.vegetarian,
     glutenFree:req.body.glutenFree,
     dairyFree:req.body.dairyFree,
-    veryHealthy:req.body.veryHealthy
+    veryHealthy:req.body.veryHealthy,
+    ingredients:req.body.ingredients
 
   };
   console.log(recipe)

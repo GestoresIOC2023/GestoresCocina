@@ -21,7 +21,6 @@ const addNewRecipes = async (numberOfRecipes, userID) => {
           url_image: data.recipes[0].image,
           summary: data.recipes[0].summary,
           instructions: data.recipes[0].instructions,
-          //category: data.recipes[0].diets,
           vegetarian:data.recipes[0].vegetarian,
           glutenFree:data.recipes[0].glutenFree,
           dairyFree:data.recipes[0].dairyFree,
@@ -29,9 +28,9 @@ const addNewRecipes = async (numberOfRecipes, userID) => {
           ingredients: data.recipes[0].extendedIngredients.map((ingredient) => {
             return {
               id: ingredient.id,
-              ingrediente_name: ingredient.name,
-              unit: ingredient.unit,
-              amount: ingredient.amount
+              ingredientName: ingredient.name,
+              unit: ingredient.measures.metric.unitShort,
+              amount: ingredient.measures.metric.amount
             };
           })
         });
