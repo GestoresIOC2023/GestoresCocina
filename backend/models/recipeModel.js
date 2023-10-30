@@ -36,16 +36,22 @@ const getRecipesSortedByRating = async () => {
 };
 const addNewRecipe = async (recipe) => {
   try {
-    const [rows] = await db.execute("INSERT into `recipe` (title, cook_time, servings, recipe_picture, description, user_id, vegetarian, glutenFree,dairyFree,veryHealthy) VALUES (?,?,?,?,?,?,?,?,?,?)",
+    const [recipesRows] = await db.execute("INSERT into `recipe` (title, cook_time, servings, recipe_picture, description, user_id, vegetarian, glutenFree,dairyFree,veryHealthy) VALUES (?,?,?,?,?,?,?,?,?,?)",
       [recipe.title, recipe.time, recipe.servings, recipe.url_image, recipe.instructions, recipe.user_id, recipe.vegetarian, recipe.glutenFree, recipe.dairyFree, recipe.veryHealthy]
     );
-    return rows;
+    const insertedId = recipesRows.insertId;
+    for (let i = 0; i < recipe.ingredients.length; i++) {
+      const [ingRows] = await db.execute('INSERT INTO ingredient (ingredient_name) VALUES (?)',
+        [recipe.ingredients[i].ingredientName]);
+      const insertedIngId = ingRows.insertId;
+      const amount = recipe.ingredients[i].amount + recipe.ingredients[i].unit;
+      await db.execute('INSERT INTO recipe_ingredient  (recipe_id, ingredient_id, quantity) VALUES (?,?,?)',
+        [insertedId, insertedIngId, amount]);
+    }
   } catch (err) {
     console.log("Error insertando recetas", err);
     throw new Error("Could not insert recipes on database");
-
   }
-
 }
 
 const closeDatabase = async () => {

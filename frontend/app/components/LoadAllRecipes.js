@@ -40,11 +40,9 @@ function CardWithGrowEffect({ recipe, index }) {
 }
 function Recipes({ recipes }) {
   return (
-
     <React.Fragment>
       <CssBaseline />
-      <Container maxWidth="xl">
-        {console.log(recipes)}
+      <Container maxWidth="xl" sx={{marginBottom: '20%'}}>
         <Grid container spacing={{ xs: 3, md: 3 }} columns={{ xs: 3, sm: 8, md: 12, xl: 12 }}>
           {recipes.map((recipe, index) => (
             <Grid xs={3} sm={4} md={4} xl={4} key={recipe.id}>
