@@ -42,7 +42,7 @@ export default function CreateRecipe({ user_id }) {
   const handleAddIngredients = (e) => {
     const newIngredients = [...ingredients];
     if (ingredient && quantity) {
-      newIngredients.push({ ingredient: ingredient, quantity: quantity });
+      newIngredients.push({ ingredientName: ingredient, unit: quantity });
       setAddIngredient(newIngredients);
       setIngredient("");
       setQuantity("");
@@ -94,6 +94,7 @@ export default function CreateRecipe({ user_id }) {
     formData.append("glutenFree", data.gluten_free || null);
     formData.append("dairyFree", data.dairy_free || null);
     formData.append("veryHealthy", data.healthy || null);
+    formData.append("ingredients", JSON.stringify(ingredients));
     formData.append("file", data.photoRecipe);
 
     await fetch("/api/update/recipes", {
@@ -204,7 +205,7 @@ export default function CreateRecipe({ user_id }) {
             <ul className="list-disc">
               {ingredients.map((ingredient) => (
                 <div className="flex justify-between items-center">
-                  <li className="ml-10 pt-4">{`${ingredient.quantity} ${ingredient.ingredient}`}</li>
+                  <li className="ml-10 pt-4">{`${ingredient.unit} ${ingredient.ingredientName}`}</li>
                   <IconButton
                     onClick={() => handleRemoveIngredients(ingredient)}
                   >
