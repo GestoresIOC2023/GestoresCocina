@@ -1,49 +1,63 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import UserPage from "./user";
-import CreateRecipe from "./createRecipe";
-import {Container } from "@mui/material";
-import ButtonProfile from "./buttonProfile";
+import * as React from 'react';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import CreateRecipe from './createRecipe';
+import UserPage from './user';
+import { orange } from '@mui/material/colors';
 
-export default function MenuUser({ users }) {
-  const [page, setPage] = useState(2);
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
 
-  const handleButtonPage = (e) => {
-    setPage(e.target.id);
-  };
-
-  const Conditional = ({ page, user_id }) => {
-    if (page == 2) {
-      return <CreateRecipe user_id={user_id} />;
-    } else {
-      return <></>;
-    }
-  };
   return (
-    <Container maxWidth="xl">
-      <div className="flex flex-col md:grid md:grid-cols-3 mt-8">
-        <UserPage className="col-span-1" {...users[0]} />
-        <div className="flex flex-col col-span-2 mt-4 md:mt-0">
-          <div className="flex  justify-center gap-2 px-8">
-            <ButtonProfile id={0} handleClick={handleButtonPage}>
-              Mis recetas
-            </ButtonProfile>
-            <ButtonProfile id={1} handleClick={handleButtonPage}>
-              Recetas favoritas
-            </ButtonProfile>
-            <ButtonProfile id={2} handleClick={handleButtonPage}>
-              Añadir receta
-            </ButtonProfile>
-            <ButtonProfile id={3} handleClick={handleButtonPage}>
-              Lista de la compra
-            </ButtonProfile>
-          </div>
-          <div>
-            <Conditional page={page} {...users[0]} />
-          </div>
-        </div>
-      </div>
-    </Container>
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          {children}
+        </Box>
+      )}
+    </div>
   );
 }
+
+
+export default function MenuUser({users}) {
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  return (
+    <div className='grid grid-cols-3'>
+      <div className='col-span-1 bg-[#F6E9E0] py-20'>
+        <UserPage {...users[0]} />
+      </div>
+      <div className='col-span-2' sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs className='bg-[#FF6724]' value={value} onChange={handleChange} centered variant='fullWidth' TabIndicatorProps={{style:{backgroundColor:"black"}}} >
+          <Tab className='text-white focus:text-black' label="Recetas favoritas"  />
+          <Tab className='text-white focus:text-black' label="Mis recetas"  />
+          <Tab className='text-white focus:text-black' label="Añadir receta" />
+        </Tabs>
+      <CustomTabPanel value={value} index={0}>
+        Item One
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={1}>
+        Item Two
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}>
+        <CreateRecipe {...users[0]} />
+      </CustomTabPanel>
+      </div>
+    </div>
+  );
+}
+

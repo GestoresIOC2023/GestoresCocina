@@ -117,7 +117,7 @@ export default function CreateRecipe({ user_id }) {
         </div>
         <div className="flex flex-col justify-center items-center pb-4">
           <label
-            className=" bg-blue-400 rounded-md px-4 py-1 max-w-fit"
+            className=" bg-[#FF6724] rounded-md px-4 py-1 max-w-fit cursor-pointer"
             htmlFor="recipes"
           >
             <span className="px-1">
@@ -219,6 +219,10 @@ export default function CreateRecipe({ user_id }) {
               label="Healthy"
               control={
                 <Checkbox
+                  sx={{
+                    color: "#FF6724",
+                    "&.Mui-checked": { color: "#FF6724" },
+                  }}
                   value={"Healthy"}
                   {...register("healthy", { validate: setIsChecked })}
                 />
@@ -228,6 +232,10 @@ export default function CreateRecipe({ user_id }) {
               label="Vegan"
               control={
                 <Checkbox
+                  sx={{
+                    color: "#FF6724",
+                    "&.Mui-checked": { color: "#FF6724" },
+                  }}
                   value={"Vegan"}
                   {...register("vegan", { validate: setIsChecked })}
                 />
@@ -237,6 +245,10 @@ export default function CreateRecipe({ user_id }) {
               label="Dairy Free"
               control={
                 <Checkbox
+                  sx={{
+                    color: "#FF6724",
+                    "&.Mui-checked": { color: "#FF6724" },
+                  }}
                   value={"Dairy Free"}
                   {...register("dairy_free", { validate: setIsChecked })}
                 />
@@ -246,6 +258,10 @@ export default function CreateRecipe({ user_id }) {
               label="Gluten Free"
               control={
                 <Checkbox
+                  sx={{
+                    color: "#FF6724",
+                    "&.Mui-checked": { color: "#FF6724" },
+                  }}
                   value={"Gluten Free"}
                   {...register("gluten_free", { validate: setIsChecked })}
                 />

@@ -58,13 +58,12 @@ export default function UserPage({
   };
 
   return (
-    <div className={className}>
+    <div>
       <form
-        className="flex flex-col  p-5 justify-start items-center bg-[#F6E9E0] "
+        className="flex flex-col  p-5 justify-start items-center "
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="w-full">
-          <h1 className="text-center text-3xl p-4">Area personal</h1>
           <div className="flex flex-col border gap-4 border-1 p-2">
             <div className="flex justify-center">
               <div className="relative w-40 h-40">
@@ -78,7 +77,7 @@ export default function UserPage({
             </div>
             <div className="flex justify-center">
               <label
-                className=" bg-blue-400 rounded-md px-4 py-1"
+                className=" bg-[#FF6724] rounded-md px-4 py-1"
                 htmlFor="avatar"
               >
                 <span className="px-1">
