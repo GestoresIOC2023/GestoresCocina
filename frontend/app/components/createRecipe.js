@@ -106,9 +106,9 @@ export default function CreateRecipe({ user_id }) {
   return (
     <form className="min-h-screen" onSubmit={handleSubmit(onSubmit)}>
       <Container maxWidth="sm" className="flex flex-col p-10 items-center ">
-        <div className="relative w-full h-96">
+        <div className="relative w-full h-96 ">
           <Image
-            className="object-cover p-9"
+            className="object-cover pb-8"
             src={previewImageRecipe}
             fill
             sizes="300px"
@@ -116,9 +116,9 @@ export default function CreateRecipe({ user_id }) {
             placeholder="empty"
           ></Image>
         </div>
-        <div className="flex flex-col justify-center items-center pb-4">
+        <div className="flex flex-col justify-center items-center pb-8">
           <label
-            className=" bg-[#FF6724] rounded-md px-4 py-1 max-w-fit cursor-pointer"
+            className=" bg-[#FF6724] rounded-md px-4 py-1  max-w-fit cursor-pointer"
             htmlFor="recipes"
           >
             <span className="px-1">
@@ -289,7 +289,7 @@ export default function CreateRecipe({ user_id }) {
           </div>
 
           <input
-            className="bg-green-400 px-4 py-1 rounded-md disabled:bg-gray-500 max-w-fit"
+            className="bg-green-400 px-4 py-1 rounded-md disabled:bg-gray-500 max-w-fit cursor-pointer"
             type="submit"
             value="Guardar"
           />

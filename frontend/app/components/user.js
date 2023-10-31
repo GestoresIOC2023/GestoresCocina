@@ -77,7 +77,7 @@ export default function UserPage({
             </div>
             <div className="flex justify-center">
               <label
-                className=" bg-[#FF6724] rounded-md px-4 py-1"
+                className=" bg-[#FF6724] rounded-md px-4 py-1 cursor-pointer"
                 htmlFor="avatar"
               >
                 <span className="px-1">
