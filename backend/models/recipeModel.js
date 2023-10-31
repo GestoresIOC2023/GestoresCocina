@@ -40,16 +40,16 @@ const addNewRecipe = async (recipe) => {
     await conec.beginTransaction();
     const ingredients = JSON.parse(recipe.ingredients);
     const [recipesRows] = await conec.execute("INSERT into `recipe` (title, cook_time, servings, recipe_picture, description, user_id, vegetarian, glutenFree,dairyFree,veryHealthy) VALUES (?,?,?,?,?,?,?,?,?,?)",
-      [recipe.title, recipe.time, recipe.servings, recipe.url_image, recipe.instructions, recipe.user_id, recipe.vegetarian, recipe.glutenFree, recipe.dairyFree, recipe.veryHealthy]
+    [recipe.title, recipe.time, recipe.servings, recipe.url_image, recipe.instructions, recipe.user_id, recipe.vegetarian, recipe.glutenFree, recipe.dairyFree, recipe.veryHealthy]
     );
     const insertedId = recipesRows.insertId;
     for (let i = 0; i < ingredients.length; i++) {
       const [ingRows] = await conec.execute('INSERT INTO ingredient (ingredient_name) VALUES (?)',
-        [ingredients[i].ingredientNam]);
+      [ingredients[i].ingredientName]);
       const insertedIngId = ingRows.insertId;
       const quantity = ingredients[i].unit;
       await conec.execute('INSERT INTO recipe_ingredient  (recipe_id, ingredient_id, quantity) VALUES (?,?,?)',
-        [insertedId, insertedIngId, quantity]);
+      [insertedId, insertedIngId, quantity]);
     }
     await conec.commit();
   } catch (err) {
