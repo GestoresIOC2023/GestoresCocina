@@ -15,7 +15,13 @@ CREATE TABLE category (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     category_name VARCHAR(50) NOT NULL
 );
-
+CREATE TABLE recipe_category (
+    recipe_id INT,
+    category_id INT,
+    PRIMARY KEY (recipe_id, category_id),
+    FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id),
+    FOREIGN KEY (category_id) REFERENCES category(category_id)
+);
 INSERT INTO category (category_name) VALUES ('vegetarian');
 INSERT INTO category (category_name) VALUES ('glutenFree');
 INSERT INTO category (category_name) VALUES ('dairyFree');
@@ -36,13 +42,7 @@ CREATE TABLE recipe (
 );
 
 -- Taula intermèdia per a la relació entre recepte i categoria
-CREATE TABLE recipe_category (
-    recipe_id INT,
-    category_id INT,
-    PRIMARY KEY (recipe_id, category_id),
-    FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id),
-    FOREIGN KEY (category_id) REFERENCES category(category_id)
-);
+
 
 -- Taula d'ingredient
 CREATE TABLE ingredient (
