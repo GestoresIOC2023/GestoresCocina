@@ -11,17 +11,34 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-export default function CreateRecipe({ user_id, handleSetTab }) {
+export default function UpdateRecipe({
+  user_id,
+  recipeUpdate,
+  handleSetRecipe,
+  handleSetTab,
+}) {
   const [previewImageRecipe, setPreviewImageRecipes] = useState(
-    "/logo_white.png"
+    recipeUpdate.recipe_picture
   );
-  const [ingredient, setIngredient] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [ingredient, setIngredient] = useState();
+  const [quantity, setQuantity] = useState(recipeUpdate.quantity);
   const [ingredients, setAddIngredient] = useState([]);
-  const [isIngredient, setIsIngredient] = useState(false);
+  const [oldIngredients, setOldIngredient] = useState([]);
+  const [isUpdate, setIsUpdate] = useState(true);
+  useEffect(() => {
+    const getIngredients = async () => {
+      const response = await fetch(
+        "/api/v1/recipes/" + recipeUpdate.recipe_id.toString() + "/ingredients"
+      );
+      const data = await response.json();
+      setAddIngredient(data.ingredients);
+      setOldIngredient(data.ingredients);
+    };
+    getIngredients();
+  }, []);
 
   const handleIngredient = (e) => {
     setIngredient(e.target.value);
@@ -29,7 +46,7 @@ export default function CreateRecipe({ user_id, handleSetTab }) {
   const handleQuantity = (e) => {
     setQuantity(e.target.value);
   };
-  const isChecked = (__, formValue) => {
+  const setIsChecked = (value, formValue) => {
     if (
       formValue.healthy ||
       formValue.dairy_free ||
@@ -40,12 +57,13 @@ export default function CreateRecipe({ user_id, handleSetTab }) {
     }
     return false;
   };
-  const isFile = (value) => {
-    if (value[0] !== 0) {
-      return true;
-    }
-    return false;
-  };
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
 
   const handleAddIngredients = (e) => {
     const newIngredients = [...ingredients];
@@ -55,20 +73,15 @@ export default function CreateRecipe({ user_id, handleSetTab }) {
       setIngredient("");
       setQuantity("");
     }
+    setIsUpdate(false);
   };
   const handleRemoveIngredients = (ingredient) => {
     const newIngredients = [...ingredients];
     const index = newIngredients.indexOf(ingredient);
     newIngredients.splice(index, 1);
     setAddIngredient(newIngredients);
+    setIsUpdate(false);
   };
-
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
 
   watch((data, { name }) => {
     if (name === "photoRecipe") {
@@ -85,35 +98,36 @@ export default function CreateRecipe({ user_id, handleSetTab }) {
         }
       }
     }
+    setIsUpdate(false);
   });
 
   const onSubmit = async (data) => {
-    console.log(ingredients.length !== 0);
-    if (ingredients.length !== 0) {
-      const formData = new FormData();
-      formData.append("user_id", user_id);
-      if (data.photoRecipe[0]) {
-        formData.append("file", data.photoRecipe[0]);
-      }
-      formData.append("description", data.description);
-      formData.append("title", data.title);
-      formData.append("time", data.cook_time);
-      formData.append("servings", data.servings);
-      formData.append("vegetarian", data.vegan || "0");
-      formData.append("glutenFree", data.gluten_free || "0");
-      formData.append("dairyFree", data.dairy_free || "0");
-      formData.append("veryHealthy", data.healthy || "0");
-      formData.append("ingredients", JSON.stringify(ingredients));
-      formData.append("file", data.photoRecipe);
-
-      await fetch("/api/update/recipes", {
-        method: "POST",
-        body: formData,
-      });
-      handleSetTab(0);
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    formData.append("recipe_id", recipeUpdate.recipe_id);
+    if (data.photoRecipe[0]) {
+      formData.append("file", data.photoRecipe[0]);
     } else {
-      setIsIngredient(true);
+      formData.append("url_image", recipeUpdate.recipe_picture);
     }
+    formData.append("description", data.description);
+    formData.append("title", data.title);
+    formData.append("time", data.cook_time);
+    formData.append("servings", data.servings);
+    formData.append("vegetarian", data.vegan || "0");
+    formData.append("glutenFree", data.gluten_free || "0");
+    formData.append("dairyFree", data.dairy_free || "0");
+    formData.append("veryHealthy", data.healthy || "0");
+    formData.append("ingredients", JSON.stringify(ingredients));
+    formData.append("oldIngredients", JSON.stringify(oldIngredients));
+    formData.append("file", data.photoRecipe);
+
+    await fetch("http://localhost:5001/api/v1/recipe/", {
+      method: "PUT",
+      body: formData,
+    });
+    handleSetRecipe(null);
+    handleSetTab(0);
   };
 
   return (
@@ -158,18 +172,17 @@ export default function CreateRecipe({ user_id, handleSetTab }) {
             type="file"
             accept="image/png, image/jpeg, image/webp"
             className="hidden"
-            {...register("photoRecipe", { required: true, validate: isFile })}
+            {...register("photoRecipe")}
           />
-          <div>
-            {errors.photoRecipe && (
-              <span className="text-red-500">Este campo es requerido</span>
-            )}
-          </div>
+          <div></div>
         </div>
         <div className="flex flex-col gap-5 w-full">
           <TextField
             label="Titulo"
-            {...register("title", { required: true, pattern: "[0-9]*" })}
+            {...register("title", {
+              required: true,
+              value: recipeUpdate.title,
+            })}
             {...register("title")}
           />
           {errors.title && (
@@ -178,11 +191,13 @@ export default function CreateRecipe({ user_id, handleSetTab }) {
           <TextField
             type="number"
             label="Tiempo"
-            {...register("cook_time")}
             InputProps={{
               endAdornment: <InputAdornment position="end">min</InputAdornment>,
             }}
-            {...register("cook_time", { required: true })}
+            {...register("cook_time", {
+              required: true,
+              value: recipeUpdate.cook_time,
+            })}
           />
           {errors.cook_time && (
             <span className="text-red-500">Este campo es requerido</span>
@@ -190,7 +205,7 @@ export default function CreateRecipe({ user_id, handleSetTab }) {
           <TextField
             label="Servings"
             InputProps={{ type: "number" }}
-            {...register("servings", { required: true })}
+            {...register("servings", { value: recipeUpdate.servings })}
           />
           {errors.servings && (
             <span className="text-red-500">Este campo es requerido</span>
@@ -215,7 +230,7 @@ export default function CreateRecipe({ user_id, handleSetTab }) {
                 <AddIcon />
               </IconButton>
             </div>
-            {isIngredient && ingredients.length === 0 && (
+            {ingredients.length === 0 && (
               <span className="text-red-500">Este campo es requerido</span>
             )}
             <ul className="list-disc">
@@ -236,12 +251,13 @@ export default function CreateRecipe({ user_id, handleSetTab }) {
               label="Healthy"
               control={
                 <Checkbox
+                  defaultChecked={recipeUpdate.veryHealthy === "1"}
                   sx={{
                     color: "#FF6724",
                     "&.Mui-checked": { color: "#FF6724" },
                   }}
                   value={"1"}
-                  {...register("healthy", { validate: isChecked })}
+                  {...register("healthy", { validate: setIsChecked })}
                 />
               }
             />
@@ -249,12 +265,13 @@ export default function CreateRecipe({ user_id, handleSetTab }) {
               label="Vegan"
               control={
                 <Checkbox
+                  defaultChecked={recipeUpdate.vegetarian === "1"}
                   sx={{
                     color: "#FF6724",
                     "&.Mui-checked": { color: "#FF6724" },
                   }}
                   value={"1"}
-                  {...register("vegan", { validate: isChecked })}
+                  {...register("vegan", { validate: setIsChecked })}
                 />
               }
             />
@@ -262,12 +279,13 @@ export default function CreateRecipe({ user_id, handleSetTab }) {
               label="Dairy Free"
               control={
                 <Checkbox
+                  defaultChecked={recipeUpdate.dairyFree === "1"}
                   sx={{
                     color: "#FF6724",
                     "&.Mui-checked": { color: "#FF6724" },
                   }}
                   value={"1"}
-                  {...register("dairy_free", { validate: isChecked })}
+                  {...register("dairy_free", { validate: setIsChecked })}
                 />
               }
             />
@@ -275,12 +293,13 @@ export default function CreateRecipe({ user_id, handleSetTab }) {
               label="Gluten Free"
               control={
                 <Checkbox
+                  defaultChecked={recipeUpdate.glutenFree === "1"}
                   sx={{
                     color: "#FF6724",
                     "&.Mui-checked": { color: "#FF6724" },
                   }}
                   value={"1"}
-                  {...register("gluten_free", { validate: isChecked })}
+                  {...register("gluten_free", { validate: setIsChecked })}
                 />
               }
             />
@@ -297,7 +316,10 @@ export default function CreateRecipe({ user_id, handleSetTab }) {
               className="grow p-3 resize-none border border-gray-200 outline-none"
               minRows={10}
               maxRows={10}
-              {...register("description", { required: true })}
+              {...register("description", {
+                required: true,
+                value: recipeUpdate.description,
+              })}
             />
             {errors.description && (
               <span className="text-red-500">Este campo es requerido</span>
@@ -307,7 +329,8 @@ export default function CreateRecipe({ user_id, handleSetTab }) {
           <input
             className="bg-green-400 px-4 py-1 rounded-md disabled:bg-gray-500 max-w-fit cursor-pointer"
             type="submit"
-            value="Guardar"
+            value="Update"
+            disabled={isUpdate}
           />
         </div>
       </Container>

@@ -7,6 +7,9 @@ import Box from "@mui/material/Box";
 import CreateRecipe from "./createRecipe";
 import UserPage from "./user";
 import { Container } from "@mui/material";
+import RecipesUser from "./userRecipe";
+import { useState } from "react";
+import UpdateRecipe from "./updateRecipe";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -25,10 +28,20 @@ function CustomTabPanel(props) {
 }
 
 export default function MenuUser({ users }) {
-  const [value, setValue] = React.useState(2);
+  const [value, setValue] = useState(0);
+  const [recipeUpdate, setRecipeUpdate] = useState();
 
   const handleChange = (event, newValue) => {
+    if (newValue === 0) {
+      setRecipeUpdate(null);
+    }
     setValue(newValue);
+  };
+  const handleSetTab = (tab) => {
+    setValue(tab);
+  };
+  const handleSetRecipe = (recipe) => {
+    setRecipeUpdate(recipe);
   };
 
   return (
@@ -49,24 +62,35 @@ export default function MenuUser({ users }) {
             variant="fullWidth"
             TabIndicatorProps={{ style: { backgroundColor: "black" } }}
           >
+            <Tab className="text-white focus:text-black" label="Mis recetas" />
             <Tab
               className="text-white focus:text-black"
               label="Recetas favoritas"
             />
-            <Tab className="text-white focus:text-black" label="Mis recetas" />
             <Tab
               className="text-white focus:text-black"
-              label="Añadir receta"
+              label= {recipeUpdate ? "Actualizar receta" : "Añadir receta"}
             />
           </Tabs>
           <CustomTabPanel value={value} index={0}>
-            Item One
+            <RecipesUser
+              handleSetTab={handleSetTab}
+              handleSetRecipe={handleSetRecipe}
+              {...users[0]}
+            />
           </CustomTabPanel>
-          <CustomTabPanel value={value} index={1}>
-            Item Two
-          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}></CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
-            <CreateRecipe {...users[0]} />
+            {recipeUpdate ? (
+              <UpdateRecipe
+                handleSetRecipe={handleSetRecipe}
+                handleSetTab={handleSetTab}
+                recipeUpdate={recipeUpdate}
+                {...users[0]}
+              />
+            ) : (
+              <CreateRecipe handleSetTab={handleSetTab} {...users[0]} />
+            )}
           </CustomTabPanel>
         </div>
       </div>
