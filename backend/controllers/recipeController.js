@@ -49,20 +49,8 @@ const deleteRecipe = async (req, res) => {
 };
 
 const postRecipe = async (req, res) => {
-  let recipe = {
-    title: req.body.title,
-    time: parseInt(req.body.time),
-    servings: parseInt(req.body.servings),
-    instructions: req.body.instructions,
-    user_id: req.body.user_id,
-    vegetarian:req.body.vegetarian,
-    glutenFree:req.body.glutenFree,
-    dairyFree:req.body.dairyFree,
-    veryHealthy:req.body.veryHealthy,
-    ingredients:req.body.ingredients
-
-  };
-  
+  let recipe = {...req.body};
+  console.log(recipe)
   if (req.file) {
     const photo = "http://localhost:5001/uploads/" + req.file.originalname;
     recipe = { ...recipe, url_image: photo };
@@ -90,10 +78,36 @@ const getRecipeByCategory = async (req ,res) => {
 
 
 }
-// const upadteRecipe = (req, res) => {
-//   const recipe = req.params.id;
 
-// }
+const getRecipesByUserId = async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const recipes = await recipesModel.getRecipesByUserId(userId);
+    return res.status(200).json({ recipes });
+  } catch {
+    res
+      .status(500)
+      .send("Error al obtener las recetas por categoria");
+  }
+}
+const updateRecipe = async (req, res) => {
+  try {
+    let photo;
+    let recipe = {...req.body};
+    //Si se ha subido la foto se guarda en la base de datos con la url de la photo
+    //No se si la ruta se puede crear de otra manera en vez de un string.
+    if(req.file){
+      photo = "http://localhost:5001/uploads/" + req.file.originalname;
+      recipe = {...recipe, url_image:photo}
+    }
+    const users = await recipesModel.updateRecipe(recipe);
+    return res.status(200).json({ users });
+  } catch (err) {
+    console.log(err)
+    res.status(500).send("Error al actualizar datos del usuario");
+  }
+};
 
 
 //Obtener ingredientes a partir del ID de una receta
@@ -113,9 +127,10 @@ export default {
   getRecipe,
   postRecipe,
   deleteRecipe,
-  //upadteRecipe,
+  updateRecipe,
   getRecipesSortedByDate,
   getRecipesSortedByRating,
   getIngredientsByRecipeId,
-  getRecipeByCategory
+  getRecipeByCategory,
+  getRecipesByUserId
 };

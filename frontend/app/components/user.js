@@ -113,7 +113,7 @@ export default function UserPage({
               Usuario:
             </label>
             <input
-              id="avatar"
+              id="usuario"
               className="border-b-2 w-full px-2 py-2 text-lg focus:border-b-2 focus:border-gray-400 outline-none"
               type="text"
               placeholder="Nombre usuario"
@@ -124,19 +124,7 @@ export default function UserPage({
               <span className="text-red-500">Este campo es requerido</span>
             )}
           </div>
-          <div className="py-4">
-            <label className="text-lg block py-2" htmlFor="usuario">
-              Descripción:
-            </label>
-            <textarea
-              id="avatar"
-              className="border h-52 w-full px-2 py-2 text-lg focus:border-2 focus:border-gray-400 outline-none"
-              type="te"
-              placeholder="Descripcion"
-              defaultValue={""}
-              {...register("description")}
-            />
-          </div>
+
           <input
             className="bg-green-400 px-4 py-1 rounded-md disabled:bg-gray-500"
             type="submit"
