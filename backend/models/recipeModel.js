@@ -35,10 +35,12 @@ const getRecipesSortedByRating = async () => {
   }
 };
 const addNewRecipe = async (recipe) => {
+  //console.log(recipe);
   try {
     const conec = await db.getConnection();
     await conec.beginTransaction();
     const ingredients = JSON.parse(recipe.ingredients);
+    console.log(ingredients)
     const [recipesRows] = await conec.execute("INSERT into `recipe` (title, cook_time, servings, recipe_picture, description, user_id, vegetarian, glutenFree,dairyFree,veryHealthy) VALUES (?,?,?,?,?,?,?,?,?,?)",
     [recipe.title, recipe.time, recipe.servings, recipe.url_image, recipe.instructions, recipe.user_id, recipe.vegetarian, recipe.glutenFree, recipe.dairyFree, recipe.veryHealthy]
     );

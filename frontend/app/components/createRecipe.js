@@ -90,10 +90,10 @@ export default function CreateRecipe({ user_id }) {
     formData.append("title", data.title);
     formData.append("time", data.cook_time);
     formData.append("servings", data.servings);
-    formData.append("vegetarian", data.vegan || null);
-    formData.append("glutenFree", data.gluten_free || null);
-    formData.append("dairyFree", data.dairy_free || null);
-    formData.append("veryHealthy", data.healthy || null);
+    formData.append("vegetarian", data.vegan ? "1": "0");
+    formData.append("glutenFree", data.gluten_free ? "1": "0");
+    formData.append("dairyFree", data.dairy_free ? "1": "0");
+    formData.append("veryHealthy", data.healthy ? "1": "0");
     formData.append("ingredients", JSON.stringify(ingredients));
     formData.append("file", data.photoRecipe);
 
