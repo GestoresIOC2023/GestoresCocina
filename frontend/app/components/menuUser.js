@@ -56,20 +56,34 @@ export default function MenuUser({ users }) {
         >
           <Tabs
             className="bg-[#FF6724]"
+            sx={{ color: "white" }}
             value={value}
             onChange={handleChange}
             centered
             variant="fullWidth"
             TabIndicatorProps={{ style: { backgroundColor: "black" } }}
           >
-            <Tab className="text-white focus:text-black" label="Mis recetas" />
             <Tab
-              className="text-white focus:text-black"
+              sx={{
+                color: "white",
+                "&.Mui-selected": { color: "black" },
+              }}
+              label="Mis recetas"
+            />
+            <Tab
+              sx={{
+                color: "white",
+                "&.Mui-selected": { color: "black" },
+              }}
               label="Recetas favoritas"
             />
             <Tab
-              className="text-white focus:text-black"
-              label= {recipeUpdate ? "Actualizar receta" : "Añadir receta"}
+              sx={{
+                "&:focus": { color: "black" },
+                color: "white",
+                "&.Mui-selected": { color: "black" },
+              }}
+              label={recipeUpdate ? "Actualizar receta" : "Añadir receta"}
             />
           </Tabs>
           <CustomTabPanel value={value} index={0}>
