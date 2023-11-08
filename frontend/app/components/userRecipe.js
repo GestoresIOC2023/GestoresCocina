@@ -55,7 +55,7 @@ export default function RecipesUser({
           <Card
             key={recipe.recipe_id}
             variant="outlined"
-            sx={{ display: "flex", gap: "" }}
+            sx={{ display: "flex", gap: "", height:"100px" }}
           >
             <CardMedia
               component="img"
