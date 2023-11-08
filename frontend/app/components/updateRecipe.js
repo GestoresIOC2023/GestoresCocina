@@ -102,32 +102,34 @@ export default function UpdateRecipe({
   });
 
   const onSubmit = async (data) => {
-    const formData = new FormData();
-    formData.append("user_id", user_id);
-    formData.append("recipe_id", recipeUpdate.recipe_id);
-    if (data.photoRecipe[0]) {
-      formData.append("file", data.photoRecipe[0]);
-    } else {
-      formData.append("url_image", recipeUpdate.recipe_picture);
-    }
-    formData.append("description", data.description);
-    formData.append("title", data.title);
-    formData.append("time", data.cook_time);
-    formData.append("servings", data.servings);
-    formData.append("vegetarian", data.vegan || "0");
-    formData.append("glutenFree", data.gluten_free || "0");
-    formData.append("dairyFree", data.dairy_free || "0");
-    formData.append("veryHealthy", data.healthy || "0");
-    formData.append("ingredients", JSON.stringify(ingredients));
-    formData.append("oldIngredients", JSON.stringify(oldIngredients));
-    formData.append("file", data.photoRecipe);
+    if (ingredients.length !== 0) {
+      const formData = new FormData();
+      formData.append("user_id", user_id);
+      formData.append("recipe_id", recipeUpdate.recipe_id);
+      if (data.photoRecipe[0]) {
+        formData.append("file", data.photoRecipe[0]);
+      } else {
+        formData.append("url_image", recipeUpdate.recipe_picture);
+      }
+      formData.append("description", data.description);
+      formData.append("title", data.title);
+      formData.append("time", data.cook_time);
+      formData.append("servings", data.servings);
+      formData.append("vegetarian", data.vegan || "0");
+      formData.append("glutenFree", data.gluten_free || "0");
+      formData.append("dairyFree", data.dairy_free || "0");
+      formData.append("veryHealthy", data.healthy || "0");
+      formData.append("ingredients", JSON.stringify(ingredients));
+      formData.append("oldIngredients", JSON.stringify(oldIngredients));
+      formData.append("file", data.photoRecipe);
 
-    await fetch("http://localhost:5001/api/v1/recipe/", {
-      method: "PUT",
-      body: formData,
-    });
-    handleSetRecipe(null);
-    handleSetTab(0);
+      await fetch("http://localhost:5001/api/v1/recipe/", {
+        method: "PUT",
+        body: formData,
+      });
+      handleSetRecipe(null);
+      handleSetTab(0);
+    }
   };
 
   return (
