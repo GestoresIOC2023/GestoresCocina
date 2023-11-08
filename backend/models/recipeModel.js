@@ -18,7 +18,7 @@ const db = mysqlPromise.createPool({
 const getRecipesSortedByDate = async () => {
   try {
     const [rows] = await db.execute(
-      "SELECT * FROM `recipe` ORDER BY `updated_at`;"
+      "SELECT * FROM `recipe` ORDER BY `updated_at` DESC;"
     );
     return rows;
   } catch (err) {
@@ -57,20 +57,8 @@ const addNewRecipe = async (recipe) => {
   try {
     await conec.beginTransaction();
     const ingredients = JSON.parse(recipe.ingredients);
-    const [recipesRows] = await conec.execute(
-      "INSERT into `recipe` (title, cook_time, servings, recipe_picture, description, user_id, vegetarian, glutenFree,dairyFree,veryHealthy) VALUES (?,?,?,?,?,?,?,?,?,?)",
-      [
-        recipe.title,
-        recipe.time,
-        recipe.servings,
-        recipe.url_image,
-        recipe.description,
-        recipe.user_id,
-        recipe.vegetarian,
-        recipe.glutenFree,
-        recipe.dairyFree,
-        recipe.veryHealthy,
-      ]
+    const [recipesRows] = await conec.execute("INSERT into `recipe` (title, cook_time, servings, recipe_picture, description, user_id, vegetarian, glutenFree,dairyFree,veryHealthy) VALUES (?,?,?,?,?,?,?,?,?,?)",
+    [recipe.title, recipe.time, recipe.servings, recipe.url_image, recipe.description, recipe.user_id, recipe.vegetarian, recipe.glutenFree, recipe.dairyFree, recipe.veryHealthy]
     );
     const insertedId = recipesRows.insertId;
     for (let i = 0; i < ingredients.length; i++) {
@@ -159,12 +147,17 @@ const closeDatabase = async () => {
 
 const deleteRecipe = async (id) => {
   try {
-    const [rows] = await db.execute(
+    await db.execute(
+      "DELETE from `recipe_ingredient` WHERE recipe_id = ? ",
+      [id]
+    );
+    
+    
+    await db.execute(
       "DELETE from `recipe` WHERE recipe_id = ? ",
       [id]
     );
-    return rows;
-  } catch (err) {
+    }catch (err){
     console.error("Error borrando receta:", err);
     throw new Error(`No se puede eliminar la receta con id ${id}`);
   }
