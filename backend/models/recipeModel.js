@@ -18,7 +18,7 @@ const db = mysqlPromise.createPool({
 const getRecipesSortedByDate = async () => {
   try {
     const [rows] = await db.execute(
-      "SELECT * FROM `recipe` ORDER BY `updated_at`;"
+      "SELECT * FROM `recipe` ORDER BY `updated_at` DESC;"
     );
     return rows;
   } catch (err) {
