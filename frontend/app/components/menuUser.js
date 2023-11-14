@@ -10,6 +10,7 @@ import { Container } from "@mui/material";
 import RecipesUser from "./userRecipe";
 import { useState } from "react";
 import UpdateRecipe from "./updateRecipe";
+import CheckboxList from './shoppingList';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -85,6 +86,13 @@ export default function MenuUser({ users }) {
               }}
               label={recipeUpdate ? "Actualizar receta" : "Añadir receta"}
             />
+            <Tab
+              sx={{
+                color: "white",
+                "&.Mui-selected": { color: "black" },
+              }}
+              label="Lista de la compra"
+            />
           </Tabs>
           <CustomTabPanel value={value} index={0}>
             <RecipesUser
@@ -105,6 +113,11 @@ export default function MenuUser({ users }) {
             ) : (
               <CreateRecipe handleSetTab={handleSetTab} {...users[0]} />
             )}
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={3}>
+              <CheckboxList />
+         
+          
           </CustomTabPanel>
         </div>
       </div>

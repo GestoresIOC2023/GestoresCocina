@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, CardActionArea, CardMedia, CardContent, Avatar, IconButton, Box, Rating } from '@mui/material';
+import { Card, CardActionArea, CardContent, Avatar, IconButton, Box, Rating } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Image from 'next/image';
 export default function RecipeReviewCard(props) {
