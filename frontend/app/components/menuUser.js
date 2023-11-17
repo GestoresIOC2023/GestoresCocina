@@ -8,7 +8,7 @@ import CreateRecipe from "./createRecipe";
 import UserPage from "./user";
 import { Container } from "@mui/material";
 import RecipesUser from "./userRecipe";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import UpdateRecipe from "./updateRecipe";
 import CheckboxList from './CheckboxList';
 function CustomTabPanel(props) {
@@ -32,6 +32,13 @@ export default function MenuUser({ users }) {
   const [recipeUpdate, setRecipeUpdate] = useState();
   const [ingredients, setIngredients] = useState([]);
 
+  useEffect(() => {
+    //guardamos el id del user en la sessionStorage
+    if (users && users.length > 0 && users[0].user_id) {
+      sessionStorage.setItem('user_id', users[0].user_id);
+    }
+  }, [users]); 
+  
   const handleChange = (event, newValue) => {
     if (newValue === 0) {
       setRecipeUpdate(null);
@@ -48,7 +55,7 @@ export default function MenuUser({ users }) {
   const handleOnClick = async () => {
     const user_id = users[0].user_id;
     if (!user_id) {
-      console.log('User ID is not available.');
+      console.log('User ID no disponible.');
       return;
     }
     try {
@@ -60,7 +67,7 @@ export default function MenuUser({ users }) {
       const listOfIngredients = data.map((ing) => ing.ingredient);
       setIngredients(listOfIngredients);
     } catch (error) {
-      console.error('Error fetching ingredients on click:', error);
+      console.error('Error obteniendo ingredientes', error);
     }
   };
 
@@ -135,10 +142,7 @@ export default function MenuUser({ users }) {
             )}
           </CustomTabPanel>
           <CustomTabPanel value={value} index={3}>
-            {console.log(ingredients)}
-
-
-            <CheckboxList ingredientes={ingredients} />
+            <CheckboxList ingredientes={ingredients}/>
           </CustomTabPanel>
         </div>
       </div>

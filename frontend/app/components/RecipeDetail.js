@@ -4,33 +4,30 @@ import ChecklistIcon from '@mui/icons-material/Checklist';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
-import CreateShoppingList from './CreateShoppingList';
 import { useState, useEffect } from 'react';
-
-
 const RecipeDetail = ({ recipeData, ingredients }) => {
-  const user_id = 'google-oauth2|109739526878968317870';
-  //const user_id ='';
+  const [userId, setUserId] = useState();
+  useEffect(() => {
+    const storedUserId = sessionStorage.getItem('user_id');
+    setUserId(storedUserId);
+  }, []);
 
-  
   function handleOnClick() {
     const recipe_id = recipeData.recipe.recipe_id
-   
     const ing_name = ingredients.map((ing) => ing.ingredient_name);
-    console.log(ing_name)
     const bodyData = JSON.stringify(ing_name);
-    fetch(`/api/v1/recipe/postShoppingList/${user_id}/${recipe_id}/${bodyData}`, {
+    fetch(`/api/v1/recipe/postShoppingList/${userId}/${recipe_id}/${bodyData}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json' // Indicar que el contenido es JSON
+        'Content-Type': 'application/json' 
       },
-      // body: bodyData // Pasar los datos en el cuerpo de la solicitud
+  
     })
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      return response.json(); // O manejar la respuesta como sea apropiado
+      return response.json(); 
     })
     .then(data => {
       console.log('Success:', data);
@@ -67,7 +64,7 @@ const RecipeDetail = ({ recipeData, ingredients }) => {
       <div className='ingredients-preparation'>
         <div className='ingredients'>
           <h2 className='name-ig-pr'>INGREDIENTES
-          {user_id && 
+          {userId && 
             <Tooltip TransitionComponent={Zoom} disableFocusListener title="Añadir a la lista de la compra">
               <Button
                 sx={{ float: 'right' }}
@@ -82,9 +79,6 @@ const RecipeDetail = ({ recipeData, ingredients }) => {
             {ingredients && ingredients.map((ingredient, index) => (
               <li key={index}>{ingredient.quantity} de {ingredient.ingredient_name} </li>
             ))}
-
-
-
 
           </ul>
         </div>
