@@ -272,7 +272,6 @@ const postShoppingList = async (user_id, recipe_id, ingredients) => {
 }
 
 const getShoppingList = async (user_id) => {
-  console.log(user_id)
   try{
   const [rows] = await db.execute(
     `SELECT ingredient FROM shoppingList WHERE user_id = (?)`,
@@ -282,6 +281,18 @@ const getShoppingList = async (user_id) => {
   }catch(err){
     throw Error (`Error obteniendo la lista de la compra del usuario ${user_id}`)
   }
+}
+
+const deleteShoppingList = async(user_id) => {
+  try{
+    await db.execute(
+      "DELETE from `shoppingList` WHERE user_id = (?)",
+      [user_id]
+    )
+  }catch(err){
+    throw Error (`Error eliminando la lista ${err}`)
+  }
+
 }
 
 
@@ -298,5 +309,6 @@ export default {
   getRecipesByUserId,
   updateRecipe,
   postShoppingList,
-  getShoppingList
+  getShoppingList,
+  deleteShoppingList
 };

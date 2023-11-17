@@ -81,3 +81,4 @@ app.get("/api/v1/recipesByUserId/:userId", recipeController.getRecipesByUserId);
 app.put("/api/v1/recipe/",upload.single('file'), recipeController.updateRecipe);
 app.post("/api/v1/recipe/postShoppingList/:userid/:recipe_id/:ingredients", recipeController.postShoppingList);
 app.get("/api/v1/recipe/getShoppingList/:userid", recipeController.getShoppingList);
+app.delete("/api/v1/recipe/deleteShoppingList/:userid", recipeController.deleteShoppingList);

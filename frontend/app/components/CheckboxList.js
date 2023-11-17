@@ -17,10 +17,16 @@ export default function CheckboxList(prop) {
   const [checked, setChecked] = React.useState([]);
   const [items, setItems] = React.useState(prop.ingredientes);
   const [showPaper, setShowPaper] = React.useState(true); 
+  const [userId, setUserId] = React.useState();
+
   React.useEffect(() => {
     setItems(prop.ingredientes);
   }, [prop.ingredientes]);
-  
+  React.useEffect(() => {
+    const storedUserId = sessionStorage.getItem('user_id');
+    setUserId(storedUserId);
+  }, []);
+
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -34,10 +40,28 @@ export default function CheckboxList(prop) {
     setChecked(newChecked);
   };
 
-  const handleRemoveAll = () => {
-    setChecked([]);
-    setShowPaper(false);
+  const handleRemoveAll = async () => {
+    try {
+      const response = await fetch(`/api/v1/recipe/deleteShoppingList/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error al borrar los elementos');
+      }
+  
+      setItems([]);
+      setChecked([]);
+      setShowPaper(false);
+      
+    } catch (error) {
+      console.error('Hubo un problema con la operación de borrado:', error);
+    }
   };
+  
 
   return (
     <Box

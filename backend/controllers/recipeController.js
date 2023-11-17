@@ -135,7 +135,6 @@ const postShoppingList = async (req, res ) => {
   }
 
 }
-
 const getShoppingList = async (req, res) => {
   const user_id = req.params.userid;
   try{
@@ -144,6 +143,17 @@ const getShoppingList = async (req, res) => {
   }catch(err){
     throw Error (`Error obteniendo la lista ${err}`);
   }
+}
+const deleteShoppingList = async (req, res) => {
+  const user_id = req.params.userid;
+  try{
+    await recipesModel.deleteShoppingList(user_id);
+    return res.status(200).send('Lista borrada')
+  }catch(err){
+    throw Error (`Error eliminando la lista ${err}`);
+  }
+
+
 }
 export default {
   getRecipe,
@@ -156,5 +166,6 @@ export default {
   getRecipeByCategory,
   getRecipesByUserId,
   postShoppingList,
-  getShoppingList
+  getShoppingList,
+  deleteShoppingList
 };
