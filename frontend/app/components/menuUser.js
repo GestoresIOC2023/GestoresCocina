@@ -8,7 +8,7 @@ import CreateRecipe from "./createRecipe";
 import UserPage from "./user";
 import { Container } from "@mui/material";
 import RecipesUser from "./userRecipe";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import UpdateRecipe from "./updateRecipe";
 import CheckboxList from './CheckboxList';
 function CustomTabPanel(props) {
@@ -37,7 +37,7 @@ export default function MenuUser({ users }) {
       setRecipeUpdate(null);
     }
     setValue(newValue);
-    
+
   };
   const handleSetTab = (tab) => {
     setValue(tab);
@@ -52,27 +52,17 @@ export default function MenuUser({ users }) {
       return;
     }
     try {
-      console.log(`Fetching ingredients for user_id: ${user_id}`);
       const response = await fetch(`/api/v1/recipe/getShoppingList/${user_id}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      if (data.length === 0) {
-        console.log('Received an empty list of ingredients on click.');
-      } else {
-        console.log('Received ingredients on click:', data);
-      }
-      // Asegúrate de que data es un arreglo y que cada elemento tiene la propiedad 'ingredient'
       const listOfIngredients = data.map((ing) => ing.ingredient);
       setIngredients(listOfIngredients);
     } catch (error) {
       console.error('Error fetching ingredients on click:', error);
     }
   };
-  
-  
-  
 
   return (
     <Container className="flex-1" maxWidth="xl">
@@ -145,10 +135,10 @@ export default function MenuUser({ users }) {
             )}
           </CustomTabPanel>
           <CustomTabPanel value={value} index={3}>
-              {console.log(ingredients)}
-              
-              
-              <CheckboxList ingredientes={ingredients} />
+            {console.log(ingredients)}
+
+
+            <CheckboxList ingredientes={ingredients} />
           </CustomTabPanel>
         </div>
       </div>
