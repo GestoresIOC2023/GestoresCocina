@@ -123,6 +123,28 @@ const getIngredientsByRecipeId = async (req, res) => {
   }
 };
 
+const postShoppingList = async (req, res ) => {
+  const user_id = req.params.userid;
+  const recipe_id = req.params.recipe_id;
+  const ingredients = req.params.ingredients
+  try {
+    const ingredientsList = await recipesModel.postShoppingList(user_id,recipe_id,ingredients);
+    return res.status(200).json(ingredientsList);
+  }catch(error){
+    res.status(500).send(`Error insertando ingredientes en la base de datos`);
+  }
+
+}
+
+const getShoppingList = async (req, res) => {
+  const user_id = req.params.userid;
+  try{
+    const list = await recipesModel.getShoppingList(user_id);
+    return res.status(200).json(list);
+  }catch(err){
+    throw Error (`Error obteniendo la lista ${err}`);
+  }
+}
 export default {
   getRecipe,
   postRecipe,
@@ -132,5 +154,7 @@ export default {
   getRecipesSortedByRating,
   getIngredientsByRecipeId,
   getRecipeByCategory,
-  getRecipesByUserId
+  getRecipesByUserId,
+  postShoppingList,
+  getShoppingList
 };

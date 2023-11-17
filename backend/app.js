@@ -79,10 +79,5 @@ app.get('/api/v1/recipes/:recipe_id/ingredients', recipeController.getIngredient
 app.get("/api/v1/recipesByCat/:category", recipeController.getRecipeByCategory);
 app.get("/api/v1/recipesByUserId/:userId", recipeController.getRecipesByUserId);
 app.put("/api/v1/recipe/",upload.single('file'), recipeController.updateRecipe);
-
-//get recipes by userID
-
-
-
-// app.get("/api/v1/ingredient/:name");
-// app.post("/api/v1/ingredient/:name");
+app.post("/api/v1/recipe/postShoppingList/:userid/:recipe_id/:ingredients", recipeController.postShoppingList);
+app.get("/api/v1/recipe/getShoppingList/:userid", recipeController.getShoppingList);

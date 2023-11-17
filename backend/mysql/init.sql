@@ -78,6 +78,15 @@ CREATE TABLE rating (
     FOREIGN KEY (user_id) REFERENCES user(user_id),
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id)
 );
+CREATE TABLE shoppingList (
+  user_id VARCHAR(50) NOT NULL,
+  recipe_id INT NOT NULL,
+  ingredient VARCHAR(200) NOT NULL,
+  done BOOLEAN NOT NULL DEFAULT FALSE, 
+  PRIMARY KEY (recipe_id, user_id, ingredient),
+  FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id),
+  FOREIGN KEY (user_id) REFERENCES user(user_id)
+);
 
 -- Inserts en recipe
 INSERT INTO recipe (title, cook_time, servings, recipe_picture, description, user_id) VALUES

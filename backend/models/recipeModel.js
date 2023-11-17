@@ -58,7 +58,7 @@ const addNewRecipe = async (recipe) => {
     await conec.beginTransaction();
     const ingredients = JSON.parse(recipe.ingredients);
     const [recipesRows] = await conec.execute("INSERT into `recipe` (title, cook_time, servings, recipe_picture, description, user_id, vegetarian, glutenFree,dairyFree,veryHealthy) VALUES (?,?,?,?,?,?,?,?,?,?)",
-    [recipe.title, recipe.time, recipe.servings, recipe.url_image, recipe.description, recipe.user_id, recipe.vegetarian, recipe.glutenFree, recipe.dairyFree, recipe.veryHealthy]
+      [recipe.title, recipe.time, recipe.servings, recipe.url_image, recipe.description, recipe.user_id, recipe.vegetarian, recipe.glutenFree, recipe.dairyFree, recipe.veryHealthy]
     );
     const insertedId = recipesRows.insertId;
     for (let i = 0; i < ingredients.length; i++) {
@@ -151,13 +151,13 @@ const deleteRecipe = async (id) => {
       "DELETE from `recipe_ingredient` WHERE recipe_id = ? ",
       [id]
     );
-    
-    
+
+
     await db.execute(
       "DELETE from `recipe` WHERE recipe_id = ? ",
       [id]
     );
-    }catch (err){
+  } catch (err) {
     console.error("Error borrando receta:", err);
     throw new Error(`No se puede eliminar la receta con id ${id}`);
   }
@@ -254,6 +254,37 @@ const createRandomRecipe = async (recipe) => {
   }
 };
 
+const postShoppingList = async (user_id, recipe_id, ingredients) => {
+  let ingredient;
+  ingredients = JSON.parse(ingredients)
+  for (let i = 0; i < ingredients.length; i++) {
+    ingredient = ingredients[i];
+    console.log(`ingrediente a insertar ${ingredient}`)
+    try {
+      await db.execute(
+        'INSERT INTO `shoppingList` (user_id, recipe_id, ingredient) VALUES (?,?,?)',
+        [user_id, recipe_id, ingredient]
+      )
+    }catch(err){
+      throw new Error(`Error insertando ingrediente ${ingredient}. Error ${err}`);
+    }
+  }
+}
+
+const getShoppingList = async (user_id) => {
+  console.log(user_id)
+  try{
+  const [rows] = await db.execute(
+    `SELECT ingredient FROM shoppingList WHERE user_id = (?)`,
+    [user_id]
+  ) 
+  return rows;
+  }catch(err){
+    throw Error (`Error obteniendo la lista de la compra del usuario ${user_id}`)
+  }
+}
+
+
 export default {
   getRecipesSortedByDate,
   getRecipesSortedByRating,
@@ -266,4 +297,6 @@ export default {
   createRandomRecipe,
   getRecipesByUserId,
   updateRecipe,
+  postShoppingList,
+  getShoppingList
 };
