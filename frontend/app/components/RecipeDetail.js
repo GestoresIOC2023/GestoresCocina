@@ -5,38 +5,59 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
 import { useState, useEffect } from 'react';
+import Backdrop from '@mui/material/Backdrop';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import Typography from '@mui/material/Typography';
+import DoneOutlineSharpIcon from '@mui/icons-material/DoneOutlineSharp';
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
 const RecipeDetail = ({ recipeData, ingredients }) => {
   const [userId, setUserId] = useState();
+  const [open, setOpen] = useState(false);
+  const handleClose = () => setOpen(false);
   useEffect(() => {
     const storedUserId = sessionStorage.getItem('user_id');
     setUserId(storedUserId);
   }, []);
 
   function handleOnClick() {
+    setOpen(true)
     const recipe_id = recipeData.recipe.recipe_id
     const ing_name = ingredients.map((ing) => ing.ingredient_name);
     const bodyData = JSON.stringify(ing_name);
     fetch(`/api/v1/recipe/postShoppingList/${userId}/${recipe_id}/${bodyData}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json' 
+        'Content-Type': 'application/json'
       },
-  
+
     })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json(); 
-    })
-    .then(data => {
-      console.log('Success:', data);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   }
-      
+
   return (
     <div>
       <div className='info-general'>
@@ -64,16 +85,41 @@ const RecipeDetail = ({ recipeData, ingredients }) => {
       <div className='ingredients-preparation'>
         <div className='ingredients'>
           <h2 className='name-ig-pr'>INGREDIENTES
-          {userId && 
-            <Tooltip TransitionComponent={Zoom} disableFocusListener title="Añadir a la lista de la compra">
-              <Button
-                sx={{ float: 'right' }}
-                variant="contained"
-                color='warning'
-                endIcon={<ChecklistIcon color='action' />}
-                onClick={handleOnClick} />
-            </Tooltip>
-          }
+            {userId &&
+            <>
+              <Tooltip TransitionComponent={Zoom} disableFocusListener title="Añadir a la lista de la compra" >
+                <Button
+                  sx={{ float: 'right' }}
+                  variant="contained"
+                  color='warning'
+                  endIcon={<ChecklistIcon color='action' />}
+                  onClick={handleOnClick} />
+                
+              </Tooltip>
+              <Modal
+                  aria-labelledby="transition-modal-title"
+                  aria-describedby="transition-modal-description"
+                  open={open}
+                  onClose={handleClose}
+                  closeAfterTransition
+                  slots={{ backdrop: Backdrop }}
+                  slotProps={{
+                    backdrop: {
+                      timeout: 500,
+                    },
+                  }}
+                >
+                  <Fade in={open}>
+                    <Box sx={style}>
+                      <Typography id="transition-modal-title" variant="h6" component="h2">
+                        Lista Guardada <DoneOutlineSharpIcon color='success' />
+                      </Typography>
+                    </Box>
+                  </Fade>
+                </Modal>
+</>
+              
+            }
           </h2>
           <ul className='name-ig'>
             {ingredients && ingredients.map((ingredient, index) => (
