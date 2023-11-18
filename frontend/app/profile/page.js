@@ -1,9 +1,7 @@
-import { getAccessToken } from "@auth0/nextjs-auth0";
-import { withPageAuthRequired } from "@auth0/nextjs-auth0";
-import { getSession } from "@auth0/nextjs-auth0";
-import MenuUser from "../components/menuUser";
+import { getAccessToken, withPageAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import MenuUser from '../components/menuUser';
 
-//Pagina protegida
+// página protegida
 export default withPageAuthRequired(
   async function Profile() {
     async function createUser() {
@@ -23,33 +21,29 @@ export default withPageAuthRequired(
           updated_at: user.updated_at,
         }),
       });
+      return await getUser(); 
     }
+
     async function getUser() {
       const { user } = await getSession();
       const { accessToken } = await getAccessToken();
-      const response = await fetch(
-        `http://localhost:5001/api/v1/userById/${user.sub}`,
-        {
-          cache: "no-cache",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      const users = await response.json();
-      return users;
+      const response = await fetch(`http://localhost:5001/api/v1/userById/${user.sub}`, {
+        cache: "no-cache",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const data = await response.json();
+      return data.users || [];
     }
-    let users;
-    ({ users } = await getUser());
+
+    let users = await getUser();
     if (!users.length) {
-      const result = await createUser();
-      ({ users } = result);
+      users = await createUser();
     }
-
-
 
     return (
-      <MenuUser users={users} /> 
+      <MenuUser users={users} />
     );
   },
   { returnTo: "/profile" }
