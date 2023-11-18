@@ -30,7 +30,6 @@ export default function CheckboxList(prop) {
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
-    console.log('cambio')
 
     if (currentIndex === -1) {
       newChecked.push(value);

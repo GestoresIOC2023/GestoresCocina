@@ -86,17 +86,17 @@ const RecipeDetail = ({ recipeData, ingredients }) => {
         <div className='ingredients'>
           <h2 className='name-ig-pr'>INGREDIENTES
             {userId &&
-            <>
-              <Tooltip TransitionComponent={Zoom} disableFocusListener title="Añadir a la lista de la compra" >
-                <Button
-                  sx={{ float: 'right' }}
-                  variant="contained"
-                  color='warning'
-                  endIcon={<ChecklistIcon color='action' />}
-                  onClick={handleOnClick} />
-                
-              </Tooltip>
-              <Modal
+              <>
+                <Tooltip TransitionComponent={Zoom} disableFocusListener title="Añadir a la lista de la compra" >
+                  <Button
+                    sx={{ float: 'right' }}
+                    variant="contained"
+                    color='warning'
+                    endIcon={<ChecklistIcon color='action' />}
+                    onClick={handleOnClick} />
+
+                </Tooltip>
+                <Modal
                   aria-labelledby="transition-modal-title"
                   aria-describedby="transition-modal-description"
                   open={open}
@@ -111,14 +111,14 @@ const RecipeDetail = ({ recipeData, ingredients }) => {
                 >
                   <Fade in={open}>
                     <Box sx={style}>
-                      <Typography id="transition-modal-title" variant="h6" component="h2">
+                      <Typography id="transition-modal-title" variant="h6" component="h2" align='center'>
                         Lista Guardada <DoneOutlineSharpIcon color='success' />
                       </Typography>
                     </Box>
                   </Fade>
                 </Modal>
-</>
-              
+              </>
+
             }
           </h2>
           <ul className='name-ig'>
