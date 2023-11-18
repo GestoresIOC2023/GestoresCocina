@@ -82,3 +82,8 @@ app.put("/api/v1/recipe/",upload.single('file'), recipeController.updateRecipe);
 app.post("/api/v1/recipe/postShoppingList/:userid/:recipe_id/:ingredients", recipeController.postShoppingList);
 app.get("/api/v1/recipe/getShoppingList/:userid", recipeController.getShoppingList);
 app.delete("/api/v1/recipe/deleteShoppingList/:userid", recipeController.deleteShoppingList);
+app.get("/api/v1/recipe/rating/:user_id/:recipe_id", recipeController.getRatingByUserId);
+app.post("/api/v1/recipe/rating", recipeController.postRating);
+app.put("/api/v1/recipe/rating", recipeController.putRating);
+app.delete("/api/v1/recipe/rating/", recipeController.deleteRating);
+app.get("/api/v1/recipe/ratingAverage/:recipe_id", recipeController.getRatingAverage);

@@ -71,10 +71,10 @@ CREATE TABLE favorite (
 
 -- Taula de puntuació
 CREATE TABLE rating (
-    rating_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id VARCHAR(50) NOT NULL,
     recipe_id INT NOT NULL,
     rating INT CHECK (rating >= 1 AND rating <= 5),
+    PRIMARY KEY (recipe_id, user_id),
     FOREIGN KEY (user_id) REFERENCES user(user_id),
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id)
 );

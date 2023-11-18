@@ -295,6 +295,63 @@ const deleteShoppingList = async(user_id) => {
 
 }
 
+const getRatingByUserId = async(user_id, recipe_id) =>{
+  try{
+    const [rows] = await db.execute(
+      `Select rating from rating where user_id = ? and recipe_id = ?`, [user_id, recipe_id]
+    );
+    return rows;
+  }catch (err){
+    throw Error(`Error al obtener el rating`);
+  }
+
+}
+const insertRating = async(rating) =>{
+  try{
+    const [rows] = await db.execute(
+      `INSERT INTO rating (user_id, recipe_id, rating) VALUES (?,?,?)`, [rating.user_id, rating.recipe_id, rating.rating]
+    );
+    return rows;
+  }catch (err){
+    throw Error(`Error al obtener el rating`);
+  }
+
+}
+const updateRating = async(rating) =>{
+  try{
+    const [rows] = await db.execute(
+      `UPDATE rating SET rating=? WHERE user_id=? and recipe_id=? `, [rating.rating, rating.user_id, rating.recipe_id]
+    );
+    return rows;
+  }catch (err){
+    throw Error(`Error al obtener el rating`);
+  }
+
+}
+const deleteRating = async(rating) =>{
+  try{
+    const [rows] = await db.execute(
+      `DELETE FROM rating WHERE user_id=? and recipe_id=? `, [rating.user_id, rating.recipe_id]
+    );
+    return rows;
+  }catch (err){
+    throw Error(`Error al obtener el rating`);
+  }
+  
+}
+
+const getRatingAverage = async(recipe_id) =>{
+  try{
+    const [rows] = await db.execute(
+      `SELECT AVG(rating) as avgRating from rating WHERE recipe_id=? `, [recipe_id]
+    );
+    return rows;
+  }catch (err){
+    throw Error(`Error al obtener el rating`);
+  }
+  
+}
+
 
 export default {
   getRecipesSortedByDate,
@@ -310,5 +367,10 @@ export default {
   updateRecipe,
   postShoppingList,
   getShoppingList,
-  deleteShoppingList
+  deleteShoppingList,
+  getRatingByUserId,
+  insertRating,
+  updateRating,
+  deleteRating,
+  getRatingAverage,
 };
