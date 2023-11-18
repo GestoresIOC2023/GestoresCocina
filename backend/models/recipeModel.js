@@ -343,7 +343,7 @@ const deleteRating = async(rating) =>{
 const getRatingAverage = async(recipe_id) =>{
   try{
     const [rows] = await db.execute(
-      `SELECT AVG(rating) as avgRating from rating WHERE recipe_id=? `, [recipe_id]
+      `SELECT AVG(rating) as avgRating, COUNT(recipe_id) as count from rating WHERE recipe_id=? `, [recipe_id]
     );
     return rows;
   }catch (err){

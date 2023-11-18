@@ -14,10 +14,14 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 export default function RecipeReviewCard(props) {
   const [average, setAverage] = useState(null);
+  const [numberUsers, setNumberUsers] = useState(0)
   useEffect(() => {
     fetch(`/api/v1/recipe/ratingAverage/${props.id}`)
       .then((response) => response.json())
-      .then((data) => setAverage(data[0].avgRating));
+      .then((data) => {
+        setAverage(data[0].avgRating);
+        setNumberUsers(data[0].count);
+      });
   }, []);
 
   return (
@@ -54,8 +58,24 @@ export default function RecipeReviewCard(props) {
             ></Avatar>
             <h2>{props.title}</h2>
           </div>
-
-          <Rating name="read-only" value={average} readOnly />
+          <Box
+            sx={{
+              width: 200,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Rating
+              name="read-only"
+              value={average}
+              precision={0.5}
+              getLabelText={(value) => (value = "Hola")}
+              readOnly
+            />
+            
+              <Box sx={{ ml: 2 }}>({numberUsers})</Box>
+        
+          </Box>
           <p style={{ marginTop: "10px", fontSize: "12px", color: "gray" }}>
             Updated: {props.updated.split("T")[0]}
           </p>
