@@ -11,6 +11,7 @@ import RecipesUser from "./userRecipe";
 import { useState, useEffect } from "react";
 import UpdateRecipe from "./updateRecipe";
 import CheckboxList from './CheckboxList';
+import FavoritesList from "./FavoritesList";
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -128,7 +129,9 @@ export default function MenuUser({ users }) {
               {...users[0]}
             />
           </CustomTabPanel>
-          <CustomTabPanel value={value} index={1}></CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
+          <FavoritesList userId={users[0].user_id} onClick={() => fetchFavorites()} />
+          </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
             {recipeUpdate ? (
               <UpdateRecipe
