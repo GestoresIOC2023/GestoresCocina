@@ -10,22 +10,19 @@ import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-
+import { useUser } from '@auth0/nextjs-auth0/client';
 
 
 export default function CheckboxList(prop) {
   const [checked, setChecked] = React.useState([]);
   const [items, setItems] = React.useState(prop.ingredientes);
   const [showPaper, setShowPaper] = React.useState(true); 
-  const [userId, setUserId] = React.useState();
+  const { user } = useUser();
+  const userId = user.sub
 
   React.useEffect(() => {
     setItems(prop.ingredientes);
   }, [prop.ingredientes]);
-  React.useEffect(() => {
-    const storedUserId = sessionStorage.getItem('user_id');
-    setUserId(storedUserId);
-  }, []);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
