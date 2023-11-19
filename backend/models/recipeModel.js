@@ -352,6 +352,42 @@ const getRatingAverage = async(recipe_id) =>{
   
 }
 
+const addToFavorites = async (user_id, recipe_id) => {
+  try {
+    const [rows] = await db.execute(
+      'INSERT INTO favorite (user_id, recipe_id) VALUES (?, ?)',
+      [user_id, recipe_id]
+    );
+    return rows;
+  } catch (err) {
+    throw Error('Error al agregar a favoritos');
+  }
+};
+
+const getFavoritesByUserId = async (user_id) => {
+  try {
+    const [rows] = await db.execute(
+      'SELECT r.* FROM recipe r JOIN favorite f ON r.recipe_id = f.recipe_id WHERE f.user_id = ?',
+      [user_id]
+    );
+    return rows;
+  } catch (err) {
+    throw Error('Error al obtener recetas favoritas');
+  }
+};
+
+const checkIfRecipeIsFavorited = async (user_id, recipe_id) => {
+  try {
+    const [rows] = await db.execute(
+      'SELECT * FROM favorite WHERE user_id = ? AND recipe_id = ?',
+      [user_id, recipe_id]
+    );
+    return rows.length > 0;
+  } catch (err) {
+    throw Error('Error al verificar si la receta está en favoritos');
+  }
+};
+
 
 export default {
   getRecipesSortedByDate,
@@ -373,4 +409,7 @@ export default {
   updateRating,
   deleteRating,
   getRatingAverage,
+  addToFavorites,
+  getFavoritesByUserId,
+  checkIfRecipeIsFavorited,
 };

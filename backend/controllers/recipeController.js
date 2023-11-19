@@ -1,3 +1,4 @@
+import recipeModel from "../models/recipeModel.js";
 import recipesModel from "../models/recipeModel.js";
 
 const getRecipe = async (req, res) => {
@@ -197,6 +198,34 @@ const getRatingAverage = async (req, res) => {
   }
 };
 
+const postFavorite = async (req, res) => {
+  const { user_id, recipe_id } = req.body;
+
+  try {
+    const isFavorited = await recipeModel.checkIfRecipeIsFavorited(user_id, recipe_id);
+    if (isFavorited) {
+      return res.status(400).json({ error: 'La receta ya está en favoritos' });
+    }
+
+    const result = await recipeModel.addToFavorites(user_id, recipe_id);
+
+    return res.status(200).json({ message: 'Receta añadida a favoritos' });
+  } catch (err) {
+    console.error('Error al agregar a favoritos', err);
+    return res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+const getFavoritesByUserId = async (req, res) => {
+  const { user_id } = req.params;
+  try {
+    const favorites = await recipeModel.getFavoritesByUserId(user_id); 
+    return res.status(200).json(favorites);
+  } catch (err) {
+    throw Error('Error al obtener recetas favoritas');
+  }
+};
+
 export default {
   getRecipe,
   postRecipe,
@@ -215,4 +244,6 @@ export default {
   putRating,
   deleteRating,
   getRatingAverage,
+  postFavorite,
+  getFavoritesByUserId,
 };

@@ -12,6 +12,7 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
 import DoneOutlineSharpIcon from "@mui/icons-material/DoneOutlineSharp";
+import AddToFavoritesButton from "./addFavoritesButton";
 const style = {
   position: "absolute",
   top: "50%",
@@ -30,12 +31,12 @@ const RecipeDetail = ({ recipeData, ingredients }) => {
   const [rating, setRating] = useState(null);
   const handleClose = () => setOpen(false);
   useEffect(() => {
-    if(recipeData.recipe){
+    if (recipeData.recipe) {
       const recipe_id = recipeData.recipe.recipe_id;
-      fetch( `/api/v1/recipe/rating/${userId}/${recipe_id}`).then(response => response.json()).then(data => {
-        if(data.length === 0){
+      fetch(`/api/v1/recipe/rating/${userId}/${recipe_id}`).then(response => response.json()).then(data => {
+        if (data.length === 0) {
           setRating(null);
-        }else {
+        } else {
           setRating(data[0].rating);
         }
       });
@@ -44,62 +45,62 @@ const RecipeDetail = ({ recipeData, ingredients }) => {
     setUserId(storedUserId);
   }, [recipeData]);
 
-  function handleChangeRating(event, newValue){
-    if(newValue === null){
-      fetch( `/api/v1/recipe/rating`, {
+  function handleChangeRating(event, newValue) {
+    if (newValue === null) {
+      fetch(`/api/v1/recipe/rating`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
-        body:JSON.stringify({
+        body: JSON.stringify({
           user_id: userId,
           recipe_id: recipeData.recipe.recipe_id,
         })
       }).then(response => response.json()).then(data => {
-        if(data.affectedRows === 1){
+        if (data.affectedRows === 1) {
           setRating(newValue);
-        }     
+        }
       });
       return;
     }
-    if(rating === null){
-      fetch( `/api/v1/recipe/rating`, {
+    if (rating === null) {
+      fetch(`/api/v1/recipe/rating`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body:JSON.stringify({
+        body: JSON.stringify({
           user_id: userId,
           recipe_id: recipeData.recipe.recipe_id,
           rating: newValue,
         })
       }).then(response => response.json()).then(data => {
-        if(data.affectedRows === 1){
+        if (data.affectedRows === 1) {
           setRating(newValue);
-        }     
+        }
       });
       return;
+    }
+    if (rating !== null) {
+      fetch(`/api/v1/recipe/rating`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          recipe_id: recipeData.recipe.recipe_id,
+          rating: newValue,
+        })
+      }).then(response => response.json()).then(data => {
+        if (data.affectedRows === 1) {
+          setRating(newValue);
+        }
+      });
+      return;
+    }
   }
-  if(rating !== null){
-    fetch( `/api/v1/recipe/rating`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body:JSON.stringify({
-        user_id: userId,
-        recipe_id: recipeData.recipe.recipe_id,
-        rating: newValue,
-      })
-    }).then(response => response.json()).then(data => {
-      if(data.affectedRows === 1){
-        setRating(newValue);
-      }     
-    });
-    return;
-  }
-}
-  
+
   function handleOnClick() {
     console.log(recipeData);
     setOpen(true);
@@ -180,6 +181,12 @@ const RecipeDetail = ({ recipeData, ingredients }) => {
               value={rating}
               onChange={handleChangeRating}
             />
+          </div>
+          <div>
+            {console.log('recipeId:', recipeData.recipe && recipeData.recipe.recipe_id)}
+            {userId && recipeData && recipeData.recipe && (
+              <AddToFavoritesButton recipeId={recipeData.recipe.recipe_id} userId={userId} />
+            )}
           </div>
         </div>
       </div>
