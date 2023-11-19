@@ -34,6 +34,11 @@ const RecipeDetail = ({ recipeData, ingredients }) => {
 
   const { user } = useUser();
 
+  useEffect(() => {
+    if (user) {
+      setUserId(user.sub); 
+    }
+  }, [user]);
 
   const handleClose = () => setOpen(false);
   useEffect(() => {
@@ -187,7 +192,6 @@ const RecipeDetail = ({ recipeData, ingredients }) => {
             />
           </div>
           <div>
-            {console.log('recipeId:', recipeData.recipe && recipeData.recipe.recipe_id)}
             {userId && recipeData && recipeData.recipe && (
               <AddToFavoritesButton recipeId={recipeData.recipe.recipe_id} userId={userId} />
             )}
