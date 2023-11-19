@@ -12,6 +12,7 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
 import DoneOutlineSharpIcon from "@mui/icons-material/DoneOutlineSharp";
+import { useUser } from '@auth0/nextjs-auth0/client';
 const style = {
   position: "absolute",
   top: "50%",
@@ -28,6 +29,10 @@ const RecipeDetail = ({ recipeData, ingredients }) => {
   const [userId, setUserId] = useState();
   const [open, setOpen] = useState(false);
   const [rating, setRating] = useState(null);
+
+  const { user } = useUser();
+
+
   const handleClose = () => setOpen(false);
   useEffect(() => {
     if(recipeData.recipe){
@@ -40,8 +45,6 @@ const RecipeDetail = ({ recipeData, ingredients }) => {
         }
       });
     }
-    const storedUserId = sessionStorage.getItem("user_id");
-    setUserId(storedUserId);
   }, [recipeData]);
 
   function handleChangeRating(event, newValue){
@@ -187,7 +190,7 @@ const RecipeDetail = ({ recipeData, ingredients }) => {
         <div className="ingredients">
           <h2 className="name-ig-pr">
             INGREDIENTES
-            {userId && (
+            {user && (
               <>
                 <Tooltip
                   TransitionComponent={Zoom}
