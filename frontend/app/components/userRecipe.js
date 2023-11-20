@@ -66,7 +66,7 @@ export default function RecipesUser({
             <Box sx={{ display: "flex", width: "100%" }}>
               <CardActionArea href={`/recipe/${recipe.recipe_id}`}>
                 <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
+                  <Typography component="div" variant="h6">
                     {recipe.title}
                   </Typography>
                 </CardContent>

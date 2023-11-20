@@ -1,4 +1,13 @@
 import React, { useState, useEffect } from "react";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import { CardActionArea } from "@mui/material";
+import FavoriteIcon from '@mui/icons-material/Favorite';
+
 
 const FavoritesList = ({ userId, onClick }) => {
   const [favorites, setFavorites] = useState([]);
@@ -36,27 +45,49 @@ const FavoritesList = ({ userId, onClick }) => {
   }, [userId, onClick]);
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4 text-[#FF6724]">Tus recetas favoritas:</h2>
-      {loading ? (
-        <p>Cargando...</p>
-      ) : (
-        <ul>
-          {favorites.map((favorite) => (
-            <li key={favorite.recipe_id} className="mb-2">
-              <div
-                className="cursor-pointer text-[#FF6724] bg-[#F6E9E0] py-2 px-4 rounded"
-                onClick={() => {
-                  window.location.href = `/recipe/${favorite.recipe_id}`;
+    <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        {favorites.map((favorite) => (
+          <Card
+            key={favorite.recipe_id}
+            variant="outlined"
+            sx={{ display: "flex", gap: "", height:"100px" }}
+          >
+            <CardMedia
+              component="img"
+              sx={{ width: 151 }}
+              image={favorite.recipe_picture}
+              alt="Live from space album cover"
+            />
+            <Box sx={{ display: "flex", width: "100%" }}>
+              <CardActionArea href={`/recipe/${favorite.recipe_id}`}>
+                <CardContent sx={{ flex: "1 0 auto" }}>
+                  <Typography component="div" variant="h6">
+                    {favorite.title}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "3px",
+                  pl: 1,
+                  pb: 1,
                 }}
               >
-                {favorite.title}
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+                <IconButton
+                  aria-label="favorite"
+
+                >
+                  <FavoriteIcon></FavoriteIcon>
+                </IconButton>
+              </Box>
+            </Box>
+          </Card>
+        ))}
+    </Box>
+
+    
   );
 };
 
