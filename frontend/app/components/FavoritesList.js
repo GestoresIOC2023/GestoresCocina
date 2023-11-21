@@ -8,37 +8,54 @@ import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
-
 const FavoritesList = ({ userId, onClick }) => {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchFavorites = async () => {
-      try {
-        setLoading(true);
+  const fetchFavorites = async () => {
+    try {
+      setLoading(true);
 
-        const response = await fetch(`/api/v1/recipe/favorites/${userId}`);
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Datos de recetas favoritas:", data);
+      const response = await fetch(`/api/v1/recipe/favorites/${userId}`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Datos de recetas favoritas:", data);
 
-          if (data && data.length > 0) {
-            setFavorites(data);
-          } else {
-            console.warn("La respuesta de recetas favoritas está vacía");
-          }
+        if (data && data.length > 0) {
+          setFavorites(data);
         } else {
-          console.error("Error al obtener la lista de favoritos");
+          console.warn("La respuesta de recetas favoritas está vacía");
         }
-
-        setLoading(false);
-      } catch (error) {
-        console.error("Error al obtener la lista de favoritos", error);
-        setLoading(false);
+      } else {
+        console.error("Error al obtener la lista de favoritos");
       }
-    };
 
+      setLoading(false);
+    } catch (error) {
+      console.error("Error al obtener la lista de favoritos", error);
+      setLoading(false);
+    }
+  };
+
+  const handleRemoveFavorite = async (recipeId) => {
+    try {
+      setFavorites(prevFavorites => prevFavorites.filter(favorite => favorite.recipe_id !== recipeId));
+      const response = await fetch(`/api/v1/recipes/${userId}/${recipeId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        console.log("Receta eliminada de favoritos correctamente.");
+      } else {
+        console.error("Error al eliminar la receta de favoritos.");
+        fetchFavorites();
+      }
+    } catch (error) {
+      console.error("Error al eliminar la receta de favoritos", error);
+    }
+  };
+
+  useEffect(() => {
     if (onClick) {
       fetchFavorites();
     }
@@ -46,48 +63,52 @@ const FavoritesList = ({ userId, onClick }) => {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-        {favorites.map((favorite) => (
-          <Card
-            key={favorite.recipe_id}
-            variant="outlined"
-            sx={{ display: "flex", gap: "", height:"100px" }}
-          >
-            <CardMedia
-              component="img"
-              sx={{ width: 151 }}
-              image={favorite.recipe_picture}
-              alt="Live from space album cover"
-            />
-            <Box sx={{ display: "flex", width: "100%" }}>
-              <CardActionArea href={`/recipe/${favorite.recipe_id}`}>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h6">
-                    {favorite.title}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-              <Box
+      {favorites.map((favorite) => (
+        <Card
+          key={favorite.recipe_id}
+          variant="outlined"
+          sx={{ display: "flex", gap: "", height: "100px" }}
+        >
+          <CardMedia
+            component="img"
+            sx={{ width: 151 }}
+            image={favorite.recipe_picture}
+            alt="Live from space album cover"
+          />
+          <Box sx={{ display: "flex", width: "100%" }}>
+            <CardActionArea href={`/recipe/${favorite.recipe_id}`}>
+              <CardContent sx={{ flex: "1 0 auto" }}>
+                <Typography component="div" variant="h6">
+                  {favorite.title}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: "3px",
+                pl: 1,
+                pb: 1,
+              }}
+            >
+              <IconButton
+                aria-label="favorite"
+                onClick={() => handleRemoveFavorite(favorite.recipe_id)}
                 sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "3px",
-                  pl: 1,
-                  pb: 1,
-                }}
+                  color: "#FF6724",
+                  "&:hover": {
+                    color: "black",
+                  },
+                  }}
               >
-                <IconButton
-                  aria-label="favorite"
-
-                >
-                  <FavoriteIcon></FavoriteIcon>
-                </IconButton>
-              </Box>
+                <FavoriteIcon />
+              </IconButton>
             </Box>
-          </Card>
-        ))}
+          </Box>
+        </Card>
+      ))}
     </Box>
-
-    
   );
 };
 
