@@ -6,11 +6,14 @@ import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import RemoveFavoriteModal from "./RemoveFavoriteModal";
 
 const FavoritesList = ({ userId, onClick }) => {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedRecipeId, setSelectedRecipeId] = useState(null);
 
   const fetchFavorites = async () => {
     try {
@@ -37,11 +40,30 @@ const FavoritesList = ({ userId, onClick }) => {
     }
   };
 
+  const handleOpenModal = (recipeId) => {
+    setSelectedRecipeId(recipeId);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedRecipeId(null);
+    setOpenModal(false);
+  };
+
+  const handleConfirmRemoveFavorite = () => {
+    handleRemoveFavorite(selectedRecipeId);
+    handleCloseModal();
+  };
+
   const handleRemoveFavorite = async (recipeId) => {
     try {
-      setFavorites(prevFavorites => prevFavorites.filter(favorite => favorite.recipe_id !== recipeId));
+      setFavorites((prevFavorites) =>
+        prevFavorites.filter(
+          (favorite) => favorite.recipe_id !== recipeId
+        )
+      );
       const response = await fetch(`/api/v1/recipes/${userId}/${recipeId}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (response.ok) {
@@ -94,13 +116,13 @@ const FavoritesList = ({ userId, onClick }) => {
             >
               <IconButton
                 aria-label="favorite"
-                onClick={() => handleRemoveFavorite(favorite.recipe_id)}
+                onClick={() => handleOpenModal(favorite.recipe_id)}
                 sx={{
                   color: "#FF6724",
                   "&:hover": {
                     color: "black",
                   },
-                  }}
+                }}
               >
                 <FavoriteIcon />
               </IconButton>
@@ -108,6 +130,11 @@ const FavoritesList = ({ userId, onClick }) => {
           </Box>
         </Card>
       ))}
+      <RemoveFavoriteModal
+        open={openModal}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmRemoveFavorite}
+      />
     </Box>
   );
 };
