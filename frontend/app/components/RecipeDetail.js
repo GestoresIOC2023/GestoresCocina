@@ -38,11 +38,7 @@ const RecipeDetail = ({ recipeData, ingredients }) => {
     if (user) {
       setUserId(user.sub); 
     }
-  }, [user]);
-
-  const handleClose = () => setOpen(false);
-  useEffect(() => {
-    if (recipeData.recipe) {
+    if (recipeData.recipe && user) {
       const recipe_id = recipeData.recipe.recipe_id;
       fetch(`/api/v1/recipe/rating/${userId}/${recipe_id}`).then(response => response.json()).then(data => {
         if (data.length === 0) {
@@ -52,7 +48,10 @@ const RecipeDetail = ({ recipeData, ingredients }) => {
         }
       });
     }
-  }, [recipeData]);
+  }, [user, recipeData]);
+
+  const handleClose = () => setOpen(false);
+  
 
   function handleChangeRating(event, newValue) {
     if (newValue === null) {
@@ -188,7 +187,7 @@ const RecipeDetail = ({ recipeData, ingredients }) => {
             <Rating
               name="simple-controlled"
               value={rating}
-              onChange={handleChangeRating}
+              onChange={userId && handleChangeRating}
             />
           </div>
           <div>
