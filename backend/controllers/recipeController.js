@@ -226,6 +226,17 @@ const getFavoritesByUserId = async (req, res) => {
   }
 };
 
+const deleteRecipeFavorite = async (req, res) => {
+  const { user_id, recipe_id } = req.params;
+  try {
+    const deleteFavorite = await recipeModel.deleteRecipeFromFavorites(user_id, recipe_id);
+    return res.status(200).json(deleteFavorite);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Error al eliminar la receta de favoritos.' });
+  }
+};
+
 export default {
   getRecipe,
   postRecipe,
@@ -246,4 +257,5 @@ export default {
   getRatingAverage,
   postFavorite,
   getFavoritesByUserId,
+  deleteRecipeFavorite
 };

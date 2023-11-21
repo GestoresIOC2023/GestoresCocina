@@ -388,6 +388,18 @@ const checkIfRecipeIsFavorited = async (user_id, recipe_id) => {
   }
 };
 
+const deleteRecipeFromFavorites = async(user_id, recipe_id) =>{
+  try{
+    const [rows] = await db.execute(
+      `DELETE FROM favorite WHERE user_id=? and recipe_id=? `, [user_id, recipe_id]
+    );
+    return rows;
+  }catch (err){
+    throw Error(`Error al eliminar la receta de favoritos`);
+  }
+  
+}
+
 
 export default {
   getRecipesSortedByDate,
@@ -412,4 +424,5 @@ export default {
   addToFavorites,
   getFavoritesByUserId,
   checkIfRecipeIsFavorited,
+  deleteRecipeFromFavorites
 };

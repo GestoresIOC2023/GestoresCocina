@@ -89,3 +89,4 @@ app.delete("/api/v1/recipe/rating/", recipeController.deleteRating);
 app.get("/api/v1/recipe/ratingAverage/:recipe_id", recipeController.getRatingAverage);
 app.post('/api/v1/recipe/favorite', recipeController.postFavorite);
 app.get('/api/v1/recipe/favorites/:user_id', recipeController.getFavoritesByUserId);
+app.delete('/api/v1/recipes/:user_id/:recipe_id', recipeController.deleteRecipeFavorite);
